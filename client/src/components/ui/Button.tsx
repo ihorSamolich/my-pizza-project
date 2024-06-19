@@ -27,5 +27,5 @@ const buttonVariants = cva("inline-flex gap-1 items-center border font-medium ro
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({ className, variant, size, ...props }, ref) => {
-  return <button ref={ref} className={classNames(buttonVariants({ variant, size, className }))} {...props} />;
+  return <button ref={ref} className={classNames(buttonVariants({ variant, size }), className)} {...props} />;
 });

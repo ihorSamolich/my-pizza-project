@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { ICategory } from "interfaces/category.ts";
+import { ICategory, ICategoryCreate } from "interfaces/category.ts";
 import { createBaseQuery } from "utils/BaseQuery.ts";
 
 export const categoryApi = createApi({
@@ -12,6 +12,22 @@ export const categoryApi = createApi({
       query: () => "/",
       providesTags: ["Categories"],
     }),
+
+    createCategory: builder.mutation<void, ICategoryCreate>({
+      query: (category) => {
+        const categoryFormData = new FormData();
+        categoryFormData.append("Name", category.name);
+        categoryFormData.append("Image", category.image);
+
+        return {
+          url: "/",
+          method: "POST",
+          body: categoryFormData,
+        };
+      },
+      invalidatesTags: ["Categories"],
+    }),
+
     deleteCategory: builder.mutation<void, number>({
       query: (id) => ({
         url: `/${id}`,
@@ -22,4 +38,4 @@ export const categoryApi = createApi({
   }),
 });
 
-export const { useGetAllCategoriesQuery, useDeleteCategoryMutation } = categoryApi;
+export const { useGetAllCategoriesQuery, useDeleteCategoryMutation, useCreateCategoryMutation } = categoryApi;
