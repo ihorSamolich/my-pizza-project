@@ -97,7 +97,10 @@ public class CategoriesController(IMapper mapper,
 
         var oldImage = category.Image;
 
-        category.Name = vm.Name;
+        if (vm.Name != null)
+        {
+            category.Name = vm.Name;
+        }
 
         if (vm.Image != null)
         {

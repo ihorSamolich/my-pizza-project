@@ -82,7 +82,7 @@ const CategoriesTable: React.FC<CategoriesTableProps> = (props) => {
                 <img
                   src={`${API_URL}/images/200_${category.image}`}
                   alt={category.name}
-                  className="min-w-10 w-10 h-10 bg-gray-200 rounded-full"
+                  className="min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full"
                 />
               </th>
               <td className="px-6 py-4">{category.name}</td>
