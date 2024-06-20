@@ -27,7 +27,6 @@ builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheck
 
 builder.Services.AddTransient<ICategoryControllerService, CategoryControllerService>();
 
-
 var app = builder.Build();
 
 string imagesDirPath = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["ImagesDir"]);
