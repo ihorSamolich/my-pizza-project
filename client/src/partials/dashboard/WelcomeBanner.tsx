@@ -1,4 +1,12 @@
-const WelcomeBanner = () => {
+import React from "react";
+
+interface WelcomeBannerProps {
+  title: string;
+  description: string;
+}
+const WelcomeBanner: React.FC<WelcomeBannerProps> = (props) => {
+  const { title, description } = props;
+
   return (
     <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden">
       {/* Background illustration */}
@@ -45,8 +53,8 @@ const WelcomeBanner = () => {
 
       {/* Content */}
       <div className="relative">
-        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">Good afternoon, Acme Inc. 👋</h1>
-        <p className="dark:text-indigo-200">Here is what’s happening with your projects today:</p>
+        <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1">{title} 🍕</h1>
+        <p className="dark:text-indigo-200">{description}</p>
       </div>
     </div>
   );

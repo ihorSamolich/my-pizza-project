@@ -1,7 +1,8 @@
 import { useDeleteCategoryMutation } from "app/services/categoryService";
 import ConfirmDialog from "components/ConfirmDialog";
 import { ICategory } from "interfaces/category";
-import { API_URL } from "utils/EnvData";
+import { Link } from "react-router-dom";
+import { API_URL } from "utils/envData.ts";
 
 import React, { useState } from "react";
 
@@ -87,7 +88,10 @@ const CategoriesTable: React.FC<CategoriesTableProps> = (props) => {
               </th>
               <td className="px-6 py-4">{category.name}</td>
               <td className="px-6 py-4 text-right space-x-5">
-                <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                <Link to={`/categories/edit/${category.id}`}>
+                  <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                </Link>
+
                 <button
                   onClick={() => openDeleteConfirm(category.id)}
                   className="font-medium text-red-600 dark:text-red-500 hover:underline"

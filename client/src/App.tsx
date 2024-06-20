@@ -1,5 +1,6 @@
-import Categories from "pages/categories/Categories.tsx";
-import CreateCategory from "pages/categories/CreateCategory.tsx";
+import CategoriesPage from "pages/categories/Categories.tsx";
+import CreateCategoryPage from "pages/categories/CreateCategory.tsx";
+import EditCategoryPage from "pages/categories/EditCategory.tsx";
 import { Route, Routes } from "react-router-dom";
 
 import Dashboard from "./pages/Dashboard.tsx";
@@ -13,8 +14,9 @@ function App() {
         <Route index element={<Dashboard />} />
 
         <Route path="categories/">
-          <Route path="list" element={<Categories />} />
-          <Route path="create" element={<CreateCategory />} />
+          <Route path="list" element={<CategoriesPage />} />
+          <Route path="create" element={<CreateCategoryPage />} />
+          <Route path="edit/:id" element={<EditCategoryPage />} />
         </Route>
 
         <Route path="settings/">

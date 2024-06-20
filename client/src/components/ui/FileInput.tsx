@@ -1,15 +1,14 @@
 import { IconCloudUpload, IconPhoto } from "@tabler/icons-react";
 
-import { ChangeEvent, forwardRef, useState } from "react";
+import { ChangeEvent, forwardRef } from "react";
 
 type FileInputProps = {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  preview?: string;
+  previewImage: string | undefined;
+  setPreviewImage: (value: string | undefined) => void;
 };
 
-const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ onChange, preview, ...props }, ref) => {
-  const [previewImage, setPreviewImage] = useState<string | undefined>(preview);
-
+const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ onChange, previewImage, setPreviewImage, ...props }, ref) => {
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const input = event.target;
     const file = input.files && input.files[0];

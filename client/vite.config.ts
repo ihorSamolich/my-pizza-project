@@ -14,11 +14,13 @@ export default defineConfig({
       hooks: "/src/hooks",
       pages: "/src/pages",
       app: "/src/app",
+      css: "/src/css",
       store: "/src/store",
       types: "/src/types",
       utils: "/src/utils",
       motion: "/src/motion",
       interfaces: "/src/interfaces",
+      partials: "/src/partials",
     },
   },
 });

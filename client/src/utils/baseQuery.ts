@@ -1,5 +1,5 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { API_URL } from "utils/EnvData.ts";
+import { API_URL } from "utils/envData.ts";
 
 export const createBaseQuery = (endpoint: string) =>
   fetchBaseQuery({

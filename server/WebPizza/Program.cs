@@ -4,6 +4,8 @@ using Microsoft.Extensions.FileProviders;
 using WebPizza.Data;
 using WebPizza.Mapper;
 using WebPizza.Services;
+using WebPizza.Services.ControllerServices;
+using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
+builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
+
+builder.Services.AddTransient<ICategoryControllerService, CategoryControllerService>();
+
 
 var app = builder.Build();
 

@@ -32,10 +32,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
                 <DialogPanel className="p-5 bg-white dark:bg-slate-800 border border-transparent dark:border-slate-700 overflow-auto max-w-2xl w-full max-h-full rounded-lg shadow-lg">
                   <h2 className="text-xl">{title}</h2>
                   <div className="flex gap-2 justify-end">
-                    <Button disabled={actionProcessing} onClick={() => close()} variant="secondary" size="sm">
+                    <Button disabled={actionProcessing} onClick={() => close()} variant="danger" size="sm">
                       <IconX /> No
                     </Button>
-                    <Button disabled={actionProcessing} onClick={() => action()} variant="secondary" size="sm">
+                    <Button disabled={actionProcessing} onClick={() => action()} variant="success" size="sm">
                       {actionProcessing ? <IconLoader2 className="animate-spin" /> : <IconCheck />} Yes
                     </Button>
                   </div>

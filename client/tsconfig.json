@@ -31,10 +31,12 @@
       "pages/*": ["pages/*"],
       "motion/*": ["motion/*"],
       "app/*": ["app/*"],
+      "css/*": ["css/*"],
       "store/*": ["store/*"],
       "types/*": ["types/*"],
       "utils/*": ["utils/*"],
-      "interfaces/*": ["interfaces/*"]
+      "interfaces/*": ["interfaces/*"],
+      "partials/*": ["partials/*"],
     }
 
   },

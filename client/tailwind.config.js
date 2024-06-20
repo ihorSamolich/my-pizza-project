@@ -50,6 +50,9 @@ export default {
       zIndex: {
         60: "60",
       },
+      animation: {
+        bounce: "bounce 1s linear infinite",
+      },
     },
   },
   plugins: [

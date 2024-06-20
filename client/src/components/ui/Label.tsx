@@ -1,5 +1,5 @@
 import { VariantProps, cva } from "class-variance-authority";
-import { classNames } from "utils/ClassNames.ts";
+import { classNames } from "utils/classNames.ts";
 
 import React from "react";
 

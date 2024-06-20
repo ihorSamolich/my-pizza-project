@@ -9,6 +9,8 @@ public class AppMapProfile : Profile
     {
         CreateMap<CategoryCreateVm, CategoryEntity>()
             .ForMember(c => c.Image, opt => opt.Ignore());
+
+        CreateMap<CategoryEntity, CategoryVm>();
     }
 
 }

@@ -10,6 +10,8 @@ public class CategoryCreateValidator : AbstractValidator<CategoryCreateVm>
         RuleFor(c => c.Name)
             .NotEmpty()
                 .WithMessage("Name is empty or null")
+            .MinimumLength(3)
+               .WithMessage("Name min length is 3")
             .MaximumLength(100)
                 .WithMessage("Name is too long");
 
