@@ -21,6 +21,7 @@ public class CategoryControllerService(
         try
         {
             category.Image = await imageService.SaveImageAsync(vm.Image);
+            category.DateCreated = DateTime.UtcNow;
 
             await pizzaContext.Categories.AddAsync(category);
             await pizzaContext.SaveChangesAsync();

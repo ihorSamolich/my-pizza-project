@@ -25,6 +25,7 @@ public static class SeederDB
                 Faker faker = new Faker();
 
                 var fakeCategory = new Faker<CategoryEntity>("uk")
+                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow)
                     .RuleFor(c => c.Name, f => f.Commerce.Product());
 
                 var fakeCategories = fakeCategory.Generate(10);

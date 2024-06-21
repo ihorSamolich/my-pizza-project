@@ -4,13 +4,11 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebPizza.Data.Entities
 {
     [Table("tbl_categories")]
-    public class CategoryEntity
+    public class CategoryEntity : BaseEntity
     {
-        [Key]
-        public int Id { get; set; }
         [StringLength(255), Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
         [StringLength(255), Required]
-        public string Image { get; set; }
+        public string Image { get; set; } = null!;
     }
 }
