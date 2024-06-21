@@ -1,17 +1,20 @@
 import { IconCirclePlus } from "@tabler/icons-react";
-import { useGetAllCategoriesQuery } from "app/services/categoryService.ts";
-import LoadingSpinner from "components/LoadingSpinner.tsx";
+import { useGetPagedCategoriesQuery } from "app/services/categoryService.ts";
 import { Button } from "components/ui/Button.tsx";
 import CategoriesTable from "partials/categories/CategoriesTable.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+
+const PAGE_SIZE = 5;
 
 const CategoriesPage = () => {
-  const { data: categories, isLoading } = useGetAllCategoriesQuery();
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get("page");
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+  const { data: categories, isLoading } = useGetPagedCategoriesQuery({
+    pageIndex: page ? Number(page) - 1 : 0,
+    pageSize: PAGE_SIZE,
+  });
 
   return (
     <div className="flex flex-col gap-4">
@@ -22,7 +25,7 @@ const CategoriesPage = () => {
           Create Category
         </Button>
       </Link>
-      <CategoriesTable categories={categories} isData={isLoading} />
+      <CategoriesTable categories={categories?.data} isLoading={isLoading} pagesAvailable={categories?.pagesAvailable || 0} />
     </div>
   );
 };

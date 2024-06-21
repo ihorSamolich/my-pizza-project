@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WebPizza.Data;
 using WebPizza.Services.ControllerServices.Interfaces;
+using WebPizza.Services.Interfaces;
 using WebPizza.ViewModels.Category;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WebPizza.Controllers;
 
@@ -14,6 +18,7 @@ public class CategoriesController(IMapper mapper,
     PizzaDbContext pizzaContext,
     IValidator<CategoryCreateVm> createValidator,
     ICategoryControllerService service,
+    IPaginationService<CategoryVm, CategoryFilterVm> pagination,
     IValidator<CategoryEditVm> editValidator
     ) : ControllerBase
 {
@@ -22,7 +27,9 @@ public class CategoriesController(IMapper mapper,
     {
         try
         {
-            var list = mapper.Map<List<CategoryVm>>(await pizzaContext.Categories.ToListAsync());
+            var list = await pizzaContext.Categories
+                .ProjectTo<CategoryVm>(mapper.ConfigurationProvider)
+                .ToArrayAsync();
 
             return Ok(list);
         }
@@ -32,10 +39,25 @@ public class CategoriesController(IMapper mapper,
         }
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetPage([FromQuery] CategoryFilterVm vm)
+    {
+        try
+        {
+            return Ok(await pagination.GetPageAsync(vm));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var category = mapper.Map<CategoryVm>(await pizzaContext.Categories.FirstOrDefaultAsync(c => c.Id == id));
+        var category = await pizzaContext.Categories
+            .ProjectTo<CategoryVm>(mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(c => c.Id == id);
 
         if (category is null)
             return NotFound();
@@ -98,5 +120,6 @@ public class CategoriesController(IMapper mapper,
             return StatusCode(500, ex.Message);
         }
     }
+
 
 }

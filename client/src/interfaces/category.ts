@@ -1,3 +1,5 @@
+import { IPaginationOptions } from "interfaces/pagination.ts";
+
 export interface ICategory {
   id: number;
   name: string;
@@ -13,4 +15,8 @@ export interface ICategoryEdit {
   id: number;
   name: string | null;
   image: File | null;
+}
+
+export interface ICategoryPagedRequest extends IPaginationOptions {
+  name?: string;
 }

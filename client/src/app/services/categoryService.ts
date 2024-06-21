@@ -1,6 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { ICategory, ICategoryCreate, ICategoryEdit } from "interfaces/category.ts";
+import { ICategory, ICategoryCreate, ICategoryEdit, ICategoryPagedRequest } from "interfaces/category.ts";
+import { IPagedDataResponse } from "interfaces/index.ts";
 import { createBaseQuery } from "utils/baseQuery.ts";
+import { createQueryString } from "utils/createQueryString.ts";
 import {
   generateCategoryCreateFormData,
   generateCategoryEditFormData,
@@ -14,6 +16,14 @@ export const categoryApi = createApi({
   endpoints: (builder) => ({
     getAllCategories: builder.query<ICategory[], void>({
       query: () => "getAll",
+      providesTags: ["Categories"],
+    }),
+
+    getPagedCategories: builder.query<IPagedDataResponse<ICategory>, ICategoryPagedRequest>({
+      query: (params) => {
+        const queryString = createQueryString(params as Record<string, any>);
+        return `getPage?${queryString}`;
+      },
       providesTags: ["Categories"],
     }),
 
@@ -63,4 +73,5 @@ export const {
   useEditCategoryMutation,
   useDeleteCategoryMutation,
   useCreateCategoryMutation,
+  useGetPagedCategoriesQuery,
 } = categoryApi;

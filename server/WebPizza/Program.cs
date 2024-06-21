@@ -2,11 +2,14 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WebPizza.Data;
+using WebPizza.Data.Entities;
 using WebPizza.Mapper;
 using WebPizza.Services;
 using WebPizza.Services.ControllerServices;
 using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
+using WebPizza.Services.PaginationServices;
+using WebPizza.ViewModels.Category;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,8 @@ builder.Services.AddTransient<IImageValidator, ImageValidator>();
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 
 builder.Services.AddTransient<ICategoryControllerService, CategoryControllerService>();
+builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, CategoryPaginationService>();
+
 
 var app = builder.Build();
 
