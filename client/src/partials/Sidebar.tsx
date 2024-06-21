@@ -1,12 +1,12 @@
 import {
   IconBrandCampaignmonitor,
   IconBrandShopee,
-  IconBriefcase,
   IconCalendar,
+  IconCherry,
   IconDashboard,
   IconHome,
   IconInbox,
-  IconListDetails,
+  IconPizza,
   IconSettings,
   IconUserScan,
 } from "@tabler/icons-react";
@@ -147,45 +147,45 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                   )}
                 </SidebarLinkGroup>
 
-                {/*/!* Job Board *!/*/}
-                <SidebarLinkGroup activecondition={pathname.includes("job")}>
+                {/*/!* Pizzas *!/*/}
+                <SidebarLinkGroup activecondition={pathname.includes("pizzas")}>
                   {(handleClick, open) => (
                     <>
                       <SidebarLinkGroupTitle
                         href="#"
-                        icon={IconBriefcase}
-                        isActive={pathname.includes("job")}
+                        icon={IconPizza}
+                        isActive={pathname.includes("pizzas")}
                         handleClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                        Job Board
+                        Pizzas
                         <ChevronDown open={open} />
                       </SidebarLinkGroupTitle>
-                      <SidebarLinkGroupMenu open={open} links={[{ to: "/job/company-profile", label: "Company Profile" }]} />
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/pizzas/List", label: "List" }]} />
                     </>
                   )}
                 </SidebarLinkGroup>
 
                 {/*/!* Tasks *!/*/}
-                <SidebarLinkGroup activecondition={pathname.includes("tasks")}>
+                <SidebarLinkGroup activecondition={pathname.includes("ingredients")}>
                   {(handleClick, open) => (
                     <>
                       <SidebarLinkGroupTitle
                         href="#"
-                        icon={IconListDetails}
-                        isActive={pathname.includes("tasks")}
+                        icon={IconCherry}
+                        isActive={pathname.includes("ingredients")}
                         handleClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded ? handleClick() : setSidebarExpanded(true);
                         }}
                       >
-                        Tasks
+                        Ingredients
                         <ChevronDown open={open} />
                       </SidebarLinkGroupTitle>
-                      <SidebarLinkGroupMenu open={open} links={[{ to: "/tasks/activity", label: "Activity" }]} />{" "}
-                      <SidebarLinkGroupMenu open={open} links={[{ to: "/tasks/disabled", label: "Disabled" }]} />
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/ingredients/list", label: "List" }]} />
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/ingredients/create", label: "Create" }]} />
                     </>
                   )}
                 </SidebarLinkGroup>

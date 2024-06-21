@@ -8,7 +8,10 @@ namespace WebPizza.Data.Entities
     {
         [StringLength(255), Required]
         public string Name { get; set; } = null!;
+
         [StringLength(255), Required]
         public string Image { get; set; } = null!;
+
+        public ICollection<PizzaEntity> Pizzas { get; set; } = null!;
     }
 }

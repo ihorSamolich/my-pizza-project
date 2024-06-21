@@ -4,20 +4,21 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebPizza.Data;
+using WebPizza.Services.ControllerServices;
 using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
 using WebPizza.ViewModels.Category;
+using WebPizza.ViewModels.Ingredient;
 
 namespace WebPizza.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class CategoriesController(IMapper mapper,
+public class IngredientsController(IMapper mapper,
     PizzaDbContext pizzaContext,
-    IValidator<CategoryCreateVm> createValidator,
-    ICategoryControllerService service,
-    IPaginationService<CategoryVm, CategoryFilterVm> pagination,
-    IValidator<CategoryEditVm> editValidator
+    IValidator<IngredientCreateVm> createValidator,
+    IIngredientControllerService service,
+    IValidator<IngredientEditVm> editValidator
     ) : ControllerBase
 {
     [HttpGet]
@@ -25,8 +26,8 @@ public class CategoriesController(IMapper mapper,
     {
         try
         {
-            var list = await pizzaContext.Categories
-                .ProjectTo<CategoryVm>(mapper.ConfigurationProvider)
+            var list = await pizzaContext.Ingredients
+                .ProjectTo<IngredientVm>(mapper.ConfigurationProvider)
                 .ToArrayAsync();
 
             return Ok(list);
@@ -37,35 +38,21 @@ public class CategoriesController(IMapper mapper,
         }
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetPage([FromQuery] CategoryFilterVm vm)
-    {
-        try
-        {
-            return Ok(await pagination.GetPageAsync(vm));
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, ex.Message);
-        }
-    }
-
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var category = await pizzaContext.Categories
-            .ProjectTo<CategoryVm>(mapper.ConfigurationProvider)
+        var ingredient = await pizzaContext.Ingredients
+            .ProjectTo<IngredientVm>(mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(c => c.Id == id);
 
-        if (category is null)
+        if (ingredient is null)
             return NotFound();
 
-        return Ok(category);
+        return Ok(ingredient);
     }
 
-
     [HttpPost]
-    public async Task<IActionResult> Create([FromForm] CategoryCreateVm vm)
+    public async Task<IActionResult> Create([FromForm] IngredientCreateVm vm)
     {
         var validationResult = await createValidator.ValidateAsync(vm);
 
@@ -83,8 +70,9 @@ public class CategoriesController(IMapper mapper,
         }
     }
 
+
     [HttpPatch]
-    public async Task<IActionResult> Update([FromForm] CategoryEditVm vm)
+    public async Task<IActionResult> Update([FromForm] IngredientEditVm vm)
     {
         var validationResult = await editValidator.ValidateAsync(vm);
 
@@ -102,7 +90,6 @@ public class CategoriesController(IMapper mapper,
         {
             return StatusCode(500, ex.Message);
         }
-
     }
 
     [HttpDelete("{id}")]
@@ -118,6 +105,4 @@ public class CategoriesController(IMapper mapper,
             return StatusCode(500, ex.Message);
         }
     }
-
-
 }

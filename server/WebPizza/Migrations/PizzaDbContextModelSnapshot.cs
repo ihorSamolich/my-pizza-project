@@ -50,6 +50,135 @@ namespace WebPizza.Migrations
 
                     b.ToTable("tbl_categories");
                 });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.IngredientEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tbl_ingredients");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.ToTable("tbl_pizzas");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.PizzaIngredientEntity", b =>
+                {
+                    b.Property<int>("PizzaId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IngredientId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("PizzaId", "IngredientId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.ToTable("tbl_pizza_ingredients");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+                {
+                    b.HasOne("WebPizza.Data.Entities.CategoryEntity", "Category")
+                        .WithMany("Pizzas")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.PizzaIngredientEntity", b =>
+                {
+                    b.HasOne("WebPizza.Data.Entities.IngredientEntity", "Ingredient")
+                        .WithMany("Pizzas")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
+                        .WithMany("PizzaIngredients")
+                        .HasForeignKey("PizzaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Ingredient");
+
+                    b.Navigation("Pizza");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.CategoryEntity", b =>
+                {
+                    b.Navigation("Pizzas");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.IngredientEntity", b =>
+                {
+                    b.Navigation("Pizzas");
+                });
+
+            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+                {
+                    b.Navigation("PizzaIngredients");
+                });
 #pragma warning restore 612, 618
         }
     }

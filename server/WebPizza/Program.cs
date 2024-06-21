@@ -31,6 +31,8 @@ builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheck
 builder.Services.AddTransient<ICategoryControllerService, CategoryControllerService>();
 builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, CategoryPaginationService>();
 
+builder.Services.AddTransient<IIngredientControllerService, IngredientControllerService>();
+
 
 var app = builder.Build();
 

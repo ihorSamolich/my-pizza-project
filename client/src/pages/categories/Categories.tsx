@@ -22,7 +22,7 @@ const CategoriesPage = () => {
       <Link to="/categories/create" className="flex justify-end">
         <Button variant="primary" size="sm">
           <IconCirclePlus />
-          Create Category
+          Create New Category
         </Button>
       </Link>
       <CategoriesTable categories={categories?.data} isLoading={isLoading} pagesAvailable={categories?.pagesAvailable || 0} />

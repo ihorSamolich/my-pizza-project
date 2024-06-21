@@ -25,14 +25,14 @@ public static class SeederDB
                 Faker faker = new Faker();
 
                 var fakeCategory = new Faker<CategoryEntity>("uk")
-                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow)
+                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow.AddDays(f.Random.Int(-10, -1)))
                     .RuleFor(c => c.Name, f => f.Commerce.Product());
 
                 var fakeCategories = fakeCategory.Generate(10);
 
                 foreach (var category in fakeCategories)
                 {
-                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "eat");
+                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "dish", width: 1000, height: 800);
                     var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
 
                     category.Image = await imageService.SaveImageAsync(imageBase64);
@@ -42,6 +42,27 @@ public static class SeederDB
                 context.SaveChanges();
             }
 
+            if (await context.Ingredients.CountAsync() < 10)
+            {
+                Faker faker = new Faker();
+
+                var fakeIngredient = new Faker<IngredientEntity>("uk")
+                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow.AddDays(f.Random.Int(-10, -1)))
+                    .RuleFor(c => c.Name, f => f.Commerce.ProductMaterial());
+
+                var fakeIngredients = fakeIngredient.Generate(10);
+
+                foreach (var ingredient in fakeIngredients)
+                {
+                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "fruit", width: 1000, height: 800);
+                    var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
+
+                    ingredient.Image = await imageService.SaveImageAsync(imageBase64);
+                }
+
+                context.Ingredients.AddRange(fakeIngredients);
+                context.SaveChanges();
+            }
         }
     }
 
