@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebPizza.Data;
@@ -11,9 +12,11 @@ using WebPizza.Data;
 namespace WebPizza.Migrations
 {
     [DbContext(typeof(PizzaDbContext))]
-    partial class PizzaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240622155021_Update tbl pizza_sizes3")]
+    partial class Updatetblpizza_sizes3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,30 +189,25 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
                     b.Property<int>("PizzaId")
                         .HasColumnType("integer");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("SizeId")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasIndex("PizzaId");
+                    b.Property<int>("Id")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("PizzaId", "SizeId");
 
                     b.HasIndex("SizeId");
 
@@ -236,7 +234,7 @@ namespace WebPizza.Migrations
                         .IsRequired();
 
                     b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
-                        .WithMany("Ingredients")
+                        .WithMany("PizzaIngredients")
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -260,7 +258,7 @@ namespace WebPizza.Migrations
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
                 {
                     b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
-                        .WithMany("Sizes")
+                        .WithMany("PizzaSizes")
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -288,11 +286,11 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
                 {
-                    b.Navigation("Ingredients");
-
                     b.Navigation("Photos");
 
-                    b.Navigation("Sizes");
+                    b.Navigation("PizzaIngredients");
+
+                    b.Navigation("PizzaSizes");
                 });
 
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizeEntity", b =>

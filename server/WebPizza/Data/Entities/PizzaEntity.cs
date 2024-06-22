@@ -22,6 +22,7 @@ public class PizzaEntity : BaseEntity
     public int CategoryId { get; set; }
     public CategoryEntity Category { get; set; } = null!;
 
-    public List<PizzaIngredientEntity> PizzaIngredients { get; set; } = new List<PizzaIngredientEntity>();
-    public List<PizzaSizePriceEntity> PizzaSizes { get; set; } = new List<PizzaSizePriceEntity>();
+    public ICollection<PizzaPhotoEntity> Photos { get; set; } = new List<PizzaPhotoEntity>();
+    public List<PizzaIngredientEntity> Ingredients { get; set; } = new List<PizzaIngredientEntity>();
+    public List<PizzaSizePriceEntity> Sizes { get; set; } = new List<PizzaSizePriceEntity>();
 }

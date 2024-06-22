@@ -4,7 +4,7 @@ namespace WebPizza.Data.Entities
 {
 
     [Table("tbl_pizza_sizes")]
-    public class PizzaSizePriceEntity
+    public class PizzaSizePriceEntity : BaseEntity
     {
         public int PizzaId { get; set; }
         public PizzaEntity Pizza { get; set; } = null!;

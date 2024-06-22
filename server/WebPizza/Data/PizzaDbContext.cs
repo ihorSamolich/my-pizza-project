@@ -15,6 +15,8 @@ namespace WebPizza.Data
         public DbSet<PizzaSizeEntity> Sizes { get; set; } = null!;
         public DbSet<PizzaSizePriceEntity> PizzaSizes { get; set; } = null!;
 
+        public DbSet<PizzaPhotoEntity> PizzaPhotos { get; set; } = null!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -25,7 +27,7 @@ namespace WebPizza.Data
 
             modelBuilder.Entity<PizzaIngredientEntity>()
                 .HasOne(rc => rc.Pizza)
-                .WithMany(r => r.PizzaIngredients)
+                .WithMany(r => r.Ingredients)
                 .HasForeignKey(rc => rc.PizzaId)
                 .IsRequired();
 
@@ -35,13 +37,10 @@ namespace WebPizza.Data
                 .HasForeignKey(rc => rc.IngredientId)
                 .IsRequired();
 
-            // PizzaIngredients builder
-            modelBuilder.Entity<PizzaSizePriceEntity>()
-              .HasKey(ps => new { ps.PizzaId, ps.SizeId });
-
+            // PizzaSizes builder
             modelBuilder.Entity<PizzaSizePriceEntity>()
                 .HasOne(ps => ps.Pizza)
-                .WithMany(p => p.PizzaSizes)
+                .WithMany(p => p.Sizes)
                 .HasForeignKey(ps => ps.PizzaId);
 
             modelBuilder.Entity<PizzaSizePriceEntity>()

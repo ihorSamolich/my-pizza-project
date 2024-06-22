@@ -25,7 +25,7 @@ public static class SeederDB
 
 
             // Category seed
-            if (await context.Categories.CountAsync() < 10)
+            if (await context.Categories.CountAsync() < 1)
             {
                 Faker faker = new Faker();
 
@@ -48,7 +48,7 @@ public static class SeederDB
             }
 
             // Ingredient seed
-            if (await context.Ingredients.CountAsync() < 10)
+            if (await context.Ingredients.CountAsync() < 1)
             {
                 Faker faker = new Faker();
 
@@ -92,7 +92,7 @@ public static class SeederDB
             }
 
             // Pizza seed
-            if (await context.Pizzas.CountAsync() < 10)
+            if (await context.Pizzas.CountAsync() < 1)
             {
                 var faker = new Faker("en");
 
@@ -107,16 +107,26 @@ public static class SeederDB
 
                 foreach (var pizza in pizzas)
                 {
-                    var imageUrl = new Faker().Image.LoremFlickrUrl(keywords: "pizza", width: 1000, height: 800);
-                    var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
+                    int numberOfPhotos = faker.Random.Int(1, 5);
+                    for (int i = 0; i < numberOfPhotos; i++)
+                    {
+                        var imageUrl = faker.Image.LoremFlickrUrl(keywords: "pizza", width: 1000, height: 800);
+                        var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
 
-                    pizza.PizzaIngredients = context.Ingredients
+                        pizza.Photos.Add(new PizzaPhotoEntity
+                        {
+                            Name = await imageService.SaveImageAsync(imageBase64),
+                            Priority = i + 1
+                        });
+                    }
+
+                    pizza.Ingredients = context.Ingredients
                         .OrderBy(i => Guid.NewGuid())
                         .Take(new Faker().Random.Int(1, 5))
                         .Select(i => new PizzaIngredientEntity { IngredientId = i.Id })
                         .ToList();
 
-                    pizza.PizzaSizes = context.Sizes
+                    pizza.Sizes = context.Sizes
                         .Select(s => new PizzaSizePriceEntity
                         {
                             SizeId = s.Id,

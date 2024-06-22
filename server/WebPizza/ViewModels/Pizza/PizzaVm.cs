@@ -13,8 +13,9 @@ namespace WebPizza.ViewModels.Pizza
         public bool IsAvailable { get; set; }
         public CategoryVm Category { get; set; } = null!;
 
-        public IEnumerable<IngredientVm> PizzaIngredients { get; set; } = null!;
-        public IEnumerable<PizzaSizePriceVm> PizzaSizes { get; set; } = null!;
+        public IEnumerable<PizzaPhotoVm> Photos { get; set; } = null!;
+        public IEnumerable<IngredientVm> Ingredients { get; set; } = null!;
+        public IEnumerable<PizzaSizePriceVm> Sizes { get; set; } = null!;
 
 
         public DateTime DateCreated { get; set; }

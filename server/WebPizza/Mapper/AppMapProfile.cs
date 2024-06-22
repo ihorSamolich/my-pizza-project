@@ -24,6 +24,7 @@ public class AppMapProfile : Profile
         CreateMap<IngredientVm, IngredientEntity>();
 
         CreateMap<PizzaIngredientEntity, IngredientVm>()
+              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Ingredient.Id))
               .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Ingredient.Name))
               .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Ingredient.Image));
 
@@ -34,7 +35,7 @@ public class AppMapProfile : Profile
         CreateMap<PizzaSizePriceEntity, PizzaSizePriceVm>()
                .ForMember(dest => dest.SizeName, opt => opt.MapFrom(src => src.Size.Name));
 
-
+        CreateMap<PizzaPhotoEntity, PizzaPhotoVm>();
     }
 
 }

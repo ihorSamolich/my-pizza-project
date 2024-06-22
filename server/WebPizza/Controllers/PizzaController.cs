@@ -21,11 +21,7 @@ public class PizzaController(IMapper mapper,
         try
         {
             var list = await pizzaContext.Pizzas
-               .Include(x => x.PizzaIngredients)
-                   .ThenInclude(pi => pi.Ingredient)
-               .Include(x => x.Category)
-               .Include(x => x.PizzaSizes)
-                   .ThenInclude(ps => ps.Size)
+               .Include(x => x.Photos)
                .ProjectTo<PizzaVm>(mapper.ConfigurationProvider)
                .ToArrayAsync();
 
