@@ -1,0 +1,18 @@
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebPizza.Data.Entities
+{
+
+    [Table("tbl_pizza_sizes")]
+    public class PizzaSizePriceEntity
+    {
+        public int PizzaId { get; set; }
+        public PizzaEntity Pizza { get; set; } = null!;
+
+        public int SizeId { get; set; }
+        public PizzaSizeEntity Size { get; set; } = null!;
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Price { get; set; }
+    }
+}

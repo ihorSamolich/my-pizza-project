@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebPizza.Data;
@@ -11,9 +12,11 @@ using WebPizza.Data;
 namespace WebPizza.Migrations
 {
     [DbContext(typeof(PizzaDbContext))]
-    partial class PizzaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240621125826_Add pizza entity")]
+    partial class Addpizzaentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,42 +138,6 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_pizza_ingredients");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizeEntity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tbl_sizes");
-                });
-
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
-                {
-                    b.Property<int>("PizzaId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SizeId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("PizzaId", "SizeId");
-
-                    b.HasIndex("SizeId");
-
-                    b.ToTable("tbl_pizza_sizes");
-                });
-
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
                 {
                     b.HasOne("WebPizza.Data.Entities.CategoryEntity", "Category")
@@ -201,25 +168,6 @@ namespace WebPizza.Migrations
                     b.Navigation("Pizza");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
-                {
-                    b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
-                        .WithMany("PizzaSizes")
-                        .HasForeignKey("PizzaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebPizza.Data.Entities.PizzaSizeEntity", "Size")
-                        .WithMany("PizzaSizePrices")
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Pizza");
-
-                    b.Navigation("Size");
-                });
-
             modelBuilder.Entity("WebPizza.Data.Entities.CategoryEntity", b =>
                 {
                     b.Navigation("Pizzas");
@@ -233,13 +181,6 @@ namespace WebPizza.Migrations
             modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
                 {
                     b.Navigation("PizzaIngredients");
-
-                    b.Navigation("PizzaSizes");
-                });
-
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizeEntity", b =>
-                {
-                    b.Navigation("PizzaSizePrices");
                 });
 #pragma warning restore 612, 618
         }
