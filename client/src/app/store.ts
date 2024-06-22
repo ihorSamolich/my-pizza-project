@@ -2,14 +2,17 @@ import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { categoryApi } from "app/services/categoryService.ts";
 import { ingredientApi } from "app/services/ingredientService.ts";
+import { pizzaApi } from "app/services/pizzaService.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
     [categoryApi.reducerPath]: categoryApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
+    [pizzaApi.reducerPath]: pizzaApi.reducer,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(categoryApi.middleware, ingredientApi.middleware),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(categoryApi.middleware, pizzaApi.middleware, ingredientApi.middleware),
 });
 
 setupListeners(store.dispatch);

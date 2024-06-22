@@ -1,4 +1,5 @@
 ﻿using Bogus;
+using Bogus.DataSets;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using WebPizza.Data.Entities;
@@ -127,6 +128,8 @@ public static class SeederDB
                         .ToList();
 
                     pizza.Sizes = context.Sizes
+                        .OrderBy(i => Guid.NewGuid())
+                        .Take(new Faker().Random.Int(1, 5))
                         .Select(s => new PizzaSizePriceEntity
                         {
                             SizeId = s.Id,
