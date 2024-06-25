@@ -79,7 +79,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
                   {pizza.sizes.map((size) => (
                     <li
                       key={size.id}
-                      className="bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-center font-extralight text-xs flex items-center gap-1"
+                      className="bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-center font-extralight text-xs flex items-center gap-1 text-nowrap"
                     >
                       <IconCircleOff className="w-4 h-4" />
                       {`${size.sizeName} - ${size.price.toFixed(0)} грн`}
