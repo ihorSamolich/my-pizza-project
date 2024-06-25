@@ -57,7 +57,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
             >
               <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 <img
-                  src={`${API_URL}/images/200_${pizza.photos[0].name}`}
+                  src={`${API_URL}/images/200_${pizza.photos[0]?.name}`}
                   alt={pizza.name}
                   className="col-span-1 min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full"
                 />
@@ -74,12 +74,12 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
                   ))}
                 </ul>
               </td>
-              <td className="px-6 py-4 italic">
+              <td className="max-w-48 px-6 py-4 italic">
                 <ul className="flex flex-wrap gap-2">
                   {pizza.sizes.map((size) => (
                     <li
                       key={size.id}
-                      className="bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-center font-extralight text-xs flex items-center gap-1 text-nowrap"
+                      className="w-full bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-center font-extralight text-xs flex items-center justify-center gap-1 text-nowrap"
                     >
                       <IconCircleOff className="w-4 h-4" />
                       {`${size.sizeName} - ${size.price.toFixed(0)} грн`}
