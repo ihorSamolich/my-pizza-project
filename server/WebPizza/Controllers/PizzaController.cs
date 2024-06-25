@@ -6,12 +6,15 @@ using WebPizza.ViewModels.Category;
 
 using Microsoft.EntityFrameworkCore;
 using WebPizza.ViewModels.Pizza;
+using WebPizza.ViewModels.Ingredient;
+using WebPizza.Services.ControllerServices.Interfaces;
 
 namespace WebPizza.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class PizzaController(IMapper mapper,
+    IPizzaControllerService service,
     PizzaDbContext pizzaContext
     ) : ControllerBase
 {
@@ -21,7 +24,6 @@ public class PizzaController(IMapper mapper,
         try
         {
             var list = await pizzaContext.Pizzas
-               .Include(x => x.Photos)
                .ProjectTo<PizzaVm>(mapper.ConfigurationProvider)
                .ToArrayAsync();
 
@@ -30,6 +32,20 @@ public class PizzaController(IMapper mapper,
         catch (Exception)
         {
             return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromForm] PizzaCreateVm vm)
+    {
+        try
+        {
+            await service.CreateAsync(vm);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
         }
     }
 

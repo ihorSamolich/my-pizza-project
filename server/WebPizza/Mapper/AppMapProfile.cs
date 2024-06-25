@@ -32,6 +32,11 @@ public class AppMapProfile : Profile
         // Pizza
         CreateMap<PizzaEntity, PizzaVm>();
 
+        CreateMap<PizzaCreateVm, PizzaEntity>()
+             .ForMember(c => c.IsAvailable, opt => opt.Ignore())
+             .ForMember(c => c.Rating, opt => opt.Ignore())
+             .ForMember(c => c.Photos, opt => opt.Ignore());
+
         CreateMap<PizzaSizePriceEntity, PizzaSizePriceVm>()
                .ForMember(dest => dest.SizeName, opt => opt.MapFrom(src => src.Size.Name));
 

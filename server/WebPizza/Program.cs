@@ -33,6 +33,8 @@ builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, 
 
 builder.Services.AddTransient<IIngredientControllerService, IngredientControllerService>();
 
+builder.Services.AddTransient<IPizzaControllerService, PizzaControllerService>();
+
 
 var app = builder.Build();
 
