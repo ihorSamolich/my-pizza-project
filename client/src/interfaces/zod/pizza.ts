@@ -1,6 +1,23 @@
 import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "constants/index.ts";
 import { z } from "zod";
 
+export const PizzaSizePriceSchema = z.object({
+  sizeId: z
+    .string()
+    .min(1, "Size ID is required")
+    .transform((val) => parseInt(val))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "Size ID must be a positive number",
+    }),
+  price: z
+    .string()
+    .min(1, "Price is required")
+    .transform((val) => parseFloat(val))
+    .refine((val) => !isNaN(val) && val > 0, {
+      message: "Price must be a positive number",
+    }),
+});
+
 export const PizzaCreateSchema = z.object({
   name: z
     .string()
@@ -17,6 +34,8 @@ export const PizzaCreateSchema = z.object({
   }),
 
   ingredientIds: z.array(z.number()).nonempty("Ingredients must cannot be empty"),
+
+  sizes: z.array(PizzaSizePriceSchema).nonempty("Sizes must cannot be empty"),
 
   photos: z
     .any()

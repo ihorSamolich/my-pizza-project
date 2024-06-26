@@ -3,6 +3,7 @@ import { IconCheck, IconX } from "@tabler/icons-react";
 import { useGetAllCategoriesQuery } from "app/services/categoryService.ts";
 import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
 import { useCreatePizzaMutation } from "app/services/pizzaService.ts";
+import PizzaSizePriceFields from "components/PizzaSizePriceFields.tsx";
 import { Button } from "components/ui/Button.tsx";
 import Checkbox from "components/ui/Checkbox.tsx";
 import FileInputMultiple from "components/ui/FileInputMultiple.tsx";
@@ -10,11 +11,13 @@ import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import Select from "components/ui/Select.tsx";
 import TextArea from "components/ui/TextArea.tsx";
+import { IPizzaSizePrice } from "interfaces/pizza.ts";
 import { PizzaCreateSchema, PizzaCreateSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
-import { UseFormGetValues, UseFormSetValue, useForm } from "react-hook-form";
+import { UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from "react-hook-form";
+import { handleFileChange } from "utils/fileUtils.ts";
 
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const CreatePizzaPage: React.FC = () => {
   const [photos, setPhotos] = useState<File[]>([]);
@@ -30,10 +33,16 @@ const CreatePizzaPage: React.FC = () => {
     register,
     handleSubmit,
     reset,
+    control,
     setValue,
     getValues,
     formState: { errors },
   } = useForm<PizzaCreateSchemaType>({ resolver: zodResolver(PizzaCreateSchema) });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sizes",
+  });
 
   useEffect(() => {
     if (inputRef.current) {
@@ -47,11 +56,12 @@ const CreatePizzaPage: React.FC = () => {
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
 
-    await createPizza({ ...data, photos: data.photos as File[] });
+    await createPizza({ ...data, photos: data.photos as File[], sizes: data.sizes as IPizzaSizePrice[] });
   });
 
   const onReset = () => {
     reset();
+    setPhotos([]);
   };
 
   const handleCheckboxChange = (
@@ -76,26 +86,6 @@ const CreatePizzaPage: React.FC = () => {
           shouldValidate: true,
         },
       );
-    }
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files;
-
-    if (file) {
-      setPhotos((prevFiles) => {
-        const updatedFiles = [...prevFiles];
-        for (let i = 0; i < file.length; i++) {
-          const validImageTypes = ["image/gif", "image/jpeg", "image/webp", "image/png"];
-          if (validImageTypes.includes(file[i].type)) {
-            const isDuplicate = updatedFiles.some((existingFile) => existingFile.name === file[i].name);
-            if (!isDuplicate) {
-              updatedFiles.push(file[i]);
-            }
-          }
-        }
-        return updatedFiles;
-      });
     }
   };
 
@@ -154,11 +144,11 @@ const CreatePizzaPage: React.FC = () => {
         </div>
 
         <div>
-          <Label htmlFor="Images">Images</Label>
+          <Label>Images</Label>
           <FileInputMultiple files={photos} setFiles={setPhotos}>
             <Input
               {...register("photos")}
-              onChange={handleFileChange}
+              onChange={(e) => handleFileChange(e, setPhotos)}
               multiple
               ref={inputRef}
               id="photos"
@@ -166,7 +156,21 @@ const CreatePizzaPage: React.FC = () => {
               variant="file"
             />
           </FileInputMultiple>
-          {errors.photos && <p className="mt-2 text-sm text-red-600">{errors.photos.message}</p>}
+          {errors.photos && photos.length === 0 && <p className="mt-2 text-sm text-red-600">{errors.photos.message}</p>}
+        </div>
+
+        <div>
+          <Label>Sizes</Label>
+          <div className="p-2.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+            {fields.map((field, index) => (
+              <PizzaSizePriceFields key={field.id} index={index} register={register} removeSize={remove} />
+            ))}
+            <Button type="button" variant="primary" size="sm" onClick={() => append({ sizeId: 0, price: 0 })}>
+              Add Size
+            </Button>
+          </div>
+          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
+          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
         </div>
 
         <div className="flex justify-center gap-5">

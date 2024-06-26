@@ -27,4 +27,10 @@ export interface IPizzaCreate {
   categoryId: string;
   ingredientIds: number[];
   photos: File[];
+  sizes: IPizzaSizePrice[];
+}
+
+export interface IPizzaSizePrice {
+  sizeId: number;
+  price: number;
 }

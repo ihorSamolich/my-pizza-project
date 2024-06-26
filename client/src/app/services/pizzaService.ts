@@ -29,10 +29,12 @@ export const pizzaApi = createApi({
           Array.from(pizza.photos).forEach((photo) => formData.append("Photos", photo));
         }
 
-        formData.append("Sizes[0].sizeId", "1");
-        formData.append("Sizes[0].price", "200");
-        formData.append("Sizes[1].sizeId", "2");
-        formData.append("Sizes[1].price", "130");
+        if (pizza.sizes) {
+          pizza.sizes.forEach((size, index) => {
+            formData.append(`Sizes[${index}].sizeId`, size.sizeId.toString());
+            formData.append(`Sizes[${index}].price`, size.price.toString());
+          });
+        }
 
         return {
           url: "create",
