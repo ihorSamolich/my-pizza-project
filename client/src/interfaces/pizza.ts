@@ -20,3 +20,11 @@ export interface IPizza {
   sizes: IPizzaSize[];
   dateCreated: string;
 }
+
+export interface IPizzaCreate {
+  name: string;
+  description: string;
+  categoryId: string;
+  ingredientIds: number[];
+  photos: File[];
+}

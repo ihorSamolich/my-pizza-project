@@ -23,8 +23,6 @@ public static class SeederDB
 
             context.Database.Migrate();
 
-
-
             // Category seed
             if (await context.Categories.CountAsync() < 1)
             {

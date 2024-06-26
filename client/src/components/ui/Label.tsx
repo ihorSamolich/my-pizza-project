@@ -10,7 +10,7 @@ const labelVariants = cva("block mb-2 text-gray-900 dark:text-white", {
     },
     size: {
       default: "text-md",
-      small: "text-sm",
+      small: "text-md mb-0 flex items-center gap-2",
     },
   },
   defaultVariants: {

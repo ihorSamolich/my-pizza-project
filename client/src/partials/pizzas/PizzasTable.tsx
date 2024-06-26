@@ -1,10 +1,12 @@
 import { IconCircleOff } from "@tabler/icons-react";
+import { useDeletePizzaMutation } from "app/services/pizzaService.ts";
+import ConfirmDialog from "components/ConfirmDialog.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { IPizza } from "interfaces/pizza.ts";
 import { Link } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
 
-import React from "react";
+import React, { useState } from "react";
 
 interface PizzasTableProps {
   pizzas: IPizza[] | undefined;
@@ -13,6 +15,28 @@ interface PizzasTableProps {
 }
 const PizzasTable: React.FC<PizzasTableProps> = (props) => {
   const { pizzas, isLoading } = props;
+
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false);
+  const [pizzaIdToDelete, setPizzaIdToDelete] = useState<number | null>(null);
+
+  const [deletePizza, { isLoading: isDeleting }] = useDeletePizzaMutation();
+
+  const handleDelete = async () => {
+    if (pizzaIdToDelete !== null) {
+      try {
+        await deletePizza(pizzaIdToDelete).unwrap();
+      } catch (err) {
+        console.error("Failed to delete the pizza: ", err);
+      }
+      setIsDeleteConfirmOpen(false);
+      setPizzaIdToDelete(null);
+    }
+  };
+
+  const openDeleteConfirm = (id: number) => {
+    setPizzaIdToDelete(id);
+    setIsDeleteConfirmOpen(true);
+  };
 
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -95,7 +119,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
                 </Link>
 
                 <button
-                  // onClick={() => openDeleteConfirm(ingredient.id)}
+                  onClick={() => openDeleteConfirm(pizza.id)}
                   className="font-medium text-red-600 dark:text-red-500 hover:underline"
                 >
                   Remove
@@ -106,15 +130,15 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
         </tbody>
       </table>
 
-      {/*<Pagination totalPages={pagesAvailable} />*/}
+      <ConfirmDialog
+        title="Confirm delete pizza?"
+        isOpen={isDeleteConfirmOpen}
+        close={() => setIsDeleteConfirmOpen(false)}
+        action={handleDelete}
+        actionProcessing={isDeleting}
+      />
 
-      {/*<ConfirmDialog*/}
-      {/*  title="Confirm delete category?"*/}
-      {/*  isOpen={isDeleteConfirmOpen}*/}
-      {/*  close={() => setIsDeleteConfirmOpen(false)}*/}
-      {/*  action={handleDelete}*/}
-      {/*  actionProcessing={isDeleting}*/}
-      {/*/>*/}
+      {/*<Pagination totalPages={pagesAvailable} />*/}
     </div>
   );
 };

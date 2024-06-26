@@ -8,13 +8,11 @@ import { Link } from "react-router-dom";
 const PizzasPage = () => {
   const { data: pizzas, isLoading } = useGetAllPizzasQuery();
 
-  console.log(pizzas);
-
   return (
     <div className="flex flex-col gap-4">
       <WelcomeBanner title="List of Pizzas" description="Here you can view the list of our pizzas." />
 
-      <Link to={"#"} className="flex justify-end">
+      <Link to={"/pizzas/create"} className="flex justify-end">
         <Button variant="primary" size="sm">
           <IconCirclePlus />
           Create New Pizza
