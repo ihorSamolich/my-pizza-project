@@ -1,6 +1,6 @@
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useGetPagedCategoriesQuery } from "app/services/categoryService.ts";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import CategoriesTable from "partials/categories/CategoriesTable.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import { Link, useSearchParams } from "react-router-dom";

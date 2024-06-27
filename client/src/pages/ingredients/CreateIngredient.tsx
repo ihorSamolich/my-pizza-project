@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { IconCheck, IconLoader2, IconX } from "@tabler/icons-react";
 import { useCreateIngredientMutation } from "app/services/ingredientService.ts";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import FileInput from "components/ui/FileInput.tsx";
 import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";

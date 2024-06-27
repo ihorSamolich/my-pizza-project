@@ -1,6 +1,6 @@
 import { IconTrash } from "@tabler/icons-react";
 import { useGetAllPizzaSizesQuery } from "app/services/pizzaSizeService.ts";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import Select from "components/ui/Select.tsx";

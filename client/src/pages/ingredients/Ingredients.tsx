@@ -1,6 +1,6 @@
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import IngredientsTable from "partials/ingregients/IngredientsTable.tsx";
 import { Link } from "react-router-dom";

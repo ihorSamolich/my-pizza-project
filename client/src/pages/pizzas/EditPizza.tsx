@@ -49,8 +49,11 @@ const EditPizzaPage: React.FC = () => {
       setValue("name", pizza.name);
       setValue("description", pizza.description);
       setValue("categoryId", pizza.category.id.toString());
+
       setValue(
         "ingredientIds",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         pizza.ingredients.map((ingredient) => ingredient.id),
       );
     }
