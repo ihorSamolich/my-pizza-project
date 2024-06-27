@@ -8,6 +8,7 @@ import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import { ICategory } from "interfaces/category.ts";
 import { CategoryEditSchema, CategoryEditSchemaType } from "interfaces/zod/category.ts";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
@@ -69,6 +70,9 @@ const EditCategoryPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | ${category?.name} Edit`}</title>
+      </Helmet>
       <WelcomeBanner
         title="Edit Category"
         description="Update the details of the category. You can modify the name and choose a new image."

@@ -6,6 +6,7 @@ import FileInput from "components/ui/FileInput.tsx";
 import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import { CategoryCreateSchema, CategoryCreateSchemaType } from "interfaces/zod/category.ts";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "utils/showNotification.ts";
@@ -44,11 +45,13 @@ const CreateCategoryPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>MyPizza | Category Create</title>
+      </Helmet>
       <WelcomeBanner
         title="Create a New Category"
         description="Here you can create a new category for pizza. Enter a name and choose an image to get started."
       />
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div>
           <Label htmlFor="name">Name</Label>

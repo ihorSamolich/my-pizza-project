@@ -9,6 +9,7 @@ import Label from "components/ui/Label.tsx";
 import { IIngredient } from "interfaces/ingredient.ts";
 import { IngredientEditSchema, IngredientEditSchemaType } from "interfaces/zod/ingredient.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
@@ -65,6 +66,9 @@ const EditIngredientPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | ${ingredient?.name} Edit`}</title>
+      </Helmet>
       <WelcomeBanner
         title="Edit Category"
         description="Update the details of the category. You can modify the name and choose a new image."

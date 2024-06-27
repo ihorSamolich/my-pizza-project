@@ -3,6 +3,7 @@ import { useGetPagedCategoriesQuery } from "app/services/categoryService.ts";
 import Button from "components/ui/Button.tsx";
 import CategoriesTable from "partials/categories/CategoriesTable.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
+import { Helmet } from "react-helmet";
 import { Link, useSearchParams } from "react-router-dom";
 
 const PAGE_SIZE = 5;
@@ -18,6 +19,10 @@ const CategoriesPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>MyPizza | Categories</title>
+      </Helmet>
+
       <WelcomeBanner title="List of Categories" description="Here you can view the list of our pizza categories." />
       <Link to="/categories/create" className="flex justify-end">
         <Button variant="primary" size="sm">

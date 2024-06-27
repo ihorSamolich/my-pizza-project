@@ -14,6 +14,7 @@ import TextArea from "components/ui/TextArea.tsx";
 import { IPizzaSizePrice } from "interfaces/pizza.ts";
 import { PizzaCreateSchema, PizzaCreateSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
+import { Helmet } from "react-helmet";
 import { UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { handleFileChange } from "utils/fileUtils.ts";
@@ -99,6 +100,9 @@ const CreatePizzaPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | Pizza Create`}</title>
+      </Helmet>
       <WelcomeBanner
         title="Create a New Pizza"
         description="Here you can create a new  pizza. Enter a data and choose an image to get started."

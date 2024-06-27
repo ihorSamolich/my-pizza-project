@@ -3,6 +3,7 @@ import { useGetPagedPizzasQuery } from "app/services/pizzaService.ts";
 import Button from "components/ui/Button.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import PizzasTable from "partials/pizzas/PizzasTable.tsx";
+import { Helmet } from "react-helmet";
 import { Link, useSearchParams } from "react-router-dom";
 
 const PAGE_SIZE = 5;
@@ -19,6 +20,9 @@ const PizzasPage = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | Pizzas`}</title>
+      </Helmet>
       <WelcomeBanner title="List of Pizzas" description="Here you can view the list of our pizzas." />
 
       <Link to={"/pizzas/create"} className="flex justify-end">

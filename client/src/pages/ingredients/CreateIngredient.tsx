@@ -6,6 +6,7 @@ import FileInput from "components/ui/FileInput.tsx";
 import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import { IngredientCreateSchema, IngredientCreateSchemaType } from "interfaces/zod/ingredient.ts";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { showNotification } from "utils/showNotification.ts";
@@ -44,6 +45,9 @@ const CreateIngredientPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | Ingredients Create`}</title>
+      </Helmet>
       <WelcomeBanner
         title="Create a New Ingredient"
         description="Here you can create a new ingredient for pizza. Enter a name and choose an image to get started."

@@ -13,6 +13,7 @@ import TextArea from "components/ui/TextArea.tsx";
 import { IPizza } from "interfaces/pizza.ts";
 import { PizzaEditSchema, PizzaEditSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
+import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
@@ -70,6 +71,9 @@ const EditPizzaPage: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-4">
+      <Helmet>
+        <title>{`MyPizza | ${pizza?.name} Edit`}</title>
+      </Helmet>
       <WelcomeBanner
         title="Edit Pizza"
         description="Update the details of the pizza. You can modify the name and choose a new image."
