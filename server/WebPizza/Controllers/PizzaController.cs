@@ -6,12 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using WebPizza.ViewModels.Pizza;
 using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
+using FluentValidation;
+using WebPizza.ViewModels.Category;
 
 namespace WebPizza.Controllers;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class PizzaController(IMapper mapper,
+    IValidator<PizzaCreateVm> createValidator,
     IPizzaControllerService service,
     IPaginationService<PizzaVm, PizzaFilterVm> pagination,
     PizzaDbContext pizzaContext
@@ -64,6 +67,12 @@ public class PizzaController(IMapper mapper,
     [HttpPost]
     public async Task<IActionResult> Create([FromForm] PizzaCreateVm vm)
     {
+
+        var validationResult = await createValidator.ValidateAsync(vm);
+
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
+
         try
         {
             await service.CreateAsync(vm);
