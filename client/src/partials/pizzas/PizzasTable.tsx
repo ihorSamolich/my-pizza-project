@@ -1,9 +1,9 @@
 import { IconCircleOff } from "@tabler/icons-react";
 import { useDeletePizzaMutation } from "app/services/pizzaService.ts";
 import ConfirmDialog from "components/ConfirmDialog.tsx";
+import Pagination from "components/Pagination.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { IPizza } from "interfaces/pizza.ts";
-import { Link } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
 
 import React, { useState } from "react";
@@ -14,7 +14,7 @@ interface PizzasTableProps {
   isLoading: boolean;
 }
 const PizzasTable: React.FC<PizzasTableProps> = (props) => {
-  const { pizzas, isLoading } = props;
+  const { pizzas, isLoading, pagesAvailable } = props;
 
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState<boolean>(false);
   const [pizzaIdToDelete, setPizzaIdToDelete] = useState<number | null>(null);
@@ -83,7 +83,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
                 <img
                   src={`${API_URL}/images/200_${pizza.photos[0]?.name}`}
                   alt={pizza.name}
-                  className="col-span-1 min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full"
+                  className="col-span-1 min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full hover:scale-150 transition-all duration-300 cursor-pointer"
                 />
               </th>
               <td className="px-6 py-4">{pizza.name}</td>
@@ -92,7 +92,10 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
               <td className="px-6 py-4 italic">
                 <ul className="flex flex-wrap gap-2">
                   {pizza.ingredients.map((ingredient) => (
-                    <li key={ingredient.id} className="bg-gray-200 dark:bg-gray-700 rounded-full px-3 py-1 text-center text-sm">
+                    <li
+                      key={ingredient.id}
+                      className="bg-gray-200 dark:bg-gray-700 rounded-full px-2 py-1 text-center text-xs font-normal"
+                    >
                       {ingredient.name}
                     </li>
                   ))}
@@ -113,17 +116,17 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
               </td>
               <td className="px-6 py-4">{pizza.rating.toFixed(2)}</td>
 
-              <td className="px-6 py-4 text-right space-x-5">
-                <Link to={`#`}>
+              <td className="px-6 py-4 text-right">
+                <div className="flex space-x-5">
                   <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-                </Link>
 
-                <button
-                  onClick={() => openDeleteConfirm(pizza.id)}
-                  className="font-medium text-red-600 dark:text-red-500 hover:underline"
-                >
-                  Remove
-                </button>
+                  <button
+                    onClick={() => openDeleteConfirm(pizza.id)}
+                    className="font-medium text-red-600 dark:text-red-500 hover:underline"
+                  >
+                    Remove
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
@@ -138,7 +141,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
         actionProcessing={isDeleting}
       />
 
-      {/*<Pagination totalPages={pagesAvailable} />*/}
+      <Pagination totalPages={pagesAvailable} />
     </div>
   );
 };

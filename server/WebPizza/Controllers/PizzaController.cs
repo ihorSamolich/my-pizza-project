@@ -2,12 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using WebPizza.Data;
-using WebPizza.ViewModels.Category;
-
 using Microsoft.EntityFrameworkCore;
 using WebPizza.ViewModels.Pizza;
-using WebPizza.ViewModels.Ingredient;
 using WebPizza.Services.ControllerServices.Interfaces;
+using WebPizza.Services.Interfaces;
 
 namespace WebPizza.Controllers;
 
@@ -15,6 +13,7 @@ namespace WebPizza.Controllers;
 [ApiController]
 public class PizzaController(IMapper mapper,
     IPizzaControllerService service,
+    IPaginationService<PizzaVm, PizzaFilterVm> pagination,
     PizzaDbContext pizzaContext
     ) : ControllerBase
 {
@@ -34,6 +33,20 @@ public class PizzaController(IMapper mapper,
             return StatusCode(500, "Internal server error");
         }
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetPage([FromQuery] PizzaFilterVm vm)
+    {
+        try
+        {
+            return Ok(await pagination.GetPageAsync(vm));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)

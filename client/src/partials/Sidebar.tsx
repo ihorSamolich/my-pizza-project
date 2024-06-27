@@ -164,6 +164,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                         <ChevronDown open={open} />
                       </SidebarLinkGroupTitle>
                       <SidebarLinkGroupMenu open={open} links={[{ to: "/pizzas/List", label: "List" }]} />
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/pizzas/create", label: "Create" }]} />
                     </>
                   )}
                 </SidebarLinkGroup>

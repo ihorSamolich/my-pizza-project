@@ -10,6 +10,7 @@ using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
 using WebPizza.Services.PaginationServices;
 using WebPizza.ViewModels.Category;
+using WebPizza.ViewModels.Pizza;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,8 @@ builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, 
 builder.Services.AddTransient<IIngredientControllerService, IngredientControllerService>();
 
 builder.Services.AddTransient<IPizzaControllerService, PizzaControllerService>();
+builder.Services.AddTransient<IPaginationService<PizzaVm, PizzaFilterVm>, PizzaPaginationService>();
+
 
 
 var app = builder.Build();

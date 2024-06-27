@@ -68,7 +68,7 @@ const IngredientsTable: React.FC<IngredientsTableProps> = (props) => {
                 <img
                   src={`${API_URL}/images/200_${ingredient.image}`}
                   alt={ingredient.name}
-                  className="min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full"
+                  className="min-w-10 w-10 h-10 bg-gray-200 object-cover rounded-full hover:scale-150 transition-all duration-300 cursor-pointer"
                 />
               </th>
               <td className="px-6 py-4">{ingredient.name}</td>

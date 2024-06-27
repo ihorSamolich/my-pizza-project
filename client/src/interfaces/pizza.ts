@@ -1,6 +1,7 @@
 import { ICategory } from "interfaces/category.ts";
 import { IPhoto } from "interfaces/index.ts";
 import { IIngredient } from "interfaces/ingredient.ts";
+import { IPaginationOptions } from "interfaces/pagination.ts";
 
 export interface IPizzaSize {
   id: number;
@@ -33,4 +34,13 @@ export interface IPizzaCreate {
 export interface IPizzaSizePrice {
   sizeId: number;
   price: number;
+}
+
+export interface IPizzaSize {
+  id: number;
+  name: string;
+}
+
+export interface IPizzaPagedRequest extends IPaginationOptions {
+  name?: string;
 }

@@ -1,6 +1,8 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { IPizza, IPizzaCreate } from "interfaces/pizza.ts";
+import { IPagedDataResponse } from "interfaces/index.ts";
+import { IPizza, IPizzaCreate, IPizzaPagedRequest } from "interfaces/pizza.ts";
 import { createBaseQuery } from "utils/baseQuery.ts";
+import { createQueryString } from "utils/createQueryString.ts";
 
 export const pizzaApi = createApi({
   reducerPath: "pizzaApi",
@@ -10,6 +12,14 @@ export const pizzaApi = createApi({
   endpoints: (builder) => ({
     getAllPizzas: builder.query<IPizza[], void>({
       query: () => "getAll",
+      providesTags: ["Pizzas"],
+    }),
+
+    getPagedPizzas: builder.query<IPagedDataResponse<IPizza>, IPizzaPagedRequest>({
+      query: (params) => {
+        const queryString = createQueryString(params as Record<string, any>);
+        return `getPage?${queryString}`;
+      },
       providesTags: ["Pizzas"],
     }),
 
@@ -55,4 +65,4 @@ export const pizzaApi = createApi({
   }),
 });
 
-export const { useGetAllPizzasQuery, useCreatePizzaMutation, useDeletePizzaMutation } = pizzaApi;
+export const { useGetAllPizzasQuery, useGetPagedPizzasQuery, useCreatePizzaMutation, useDeletePizzaMutation } = pizzaApi;

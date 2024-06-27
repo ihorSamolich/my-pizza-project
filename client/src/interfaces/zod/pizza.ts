@@ -2,20 +2,25 @@ import { ACCEPTED_IMAGE_MIME_TYPES, MAX_FILE_SIZE } from "constants/index.ts";
 import { z } from "zod";
 
 export const PizzaSizePriceSchema = z.object({
-  sizeId: z
-    .string()
-    .min(1, "Size ID is required")
-    .transform((val) => parseInt(val))
-    .refine((val) => !isNaN(val) && val > 0, {
-      message: "Size ID must be a positive number",
-    }),
-  price: z
-    .string()
-    .min(1, "Price is required")
-    .transform((val) => parseFloat(val))
-    .refine((val) => !isNaN(val) && val > 0, {
-      message: "Price must be a positive number",
-    }),
+  sizeId: z.preprocess(
+    (val) => (typeof val === "string" ? parseInt(val) : val),
+    z
+      .number()
+      .int()
+      .positive("Size must be a selected")
+      .refine((val) => !isNaN(val) && val > 0, {
+        message: "Size must be a selected",
+      }),
+  ),
+  price: z.preprocess(
+    (val) => (typeof val === "string" ? parseFloat(val) : val),
+    z
+      .number()
+      .positive("Price must be a positive number")
+      .refine((val) => !isNaN(val) && val > 0, {
+        message: "Price must be a correct number",
+      }),
+  ),
 });
 
 export const PizzaCreateSchema = z.object({
@@ -35,7 +40,26 @@ export const PizzaCreateSchema = z.object({
 
   ingredientIds: z.array(z.number()).nonempty("Ingredients must cannot be empty"),
 
-  sizes: z.array(PizzaSizePriceSchema).nonempty("Sizes must cannot be empty"),
+  sizes: z
+    .array(PizzaSizePriceSchema)
+    .refine(
+      (sizes) => {
+        return sizes.length > 0;
+      },
+      {
+        message: "Sizes cannot be empty",
+      },
+    )
+    .refine(
+      (sizes) => {
+        const sizeIds = sizes.map((size) => size.sizeId);
+        const uniqueSizeIds = new Set(sizeIds);
+        return sizeIds.length === uniqueSizeIds.size;
+      },
+      {
+        message: "Sizes must be unique",
+      },
+    ),
 
   photos: z
     .any()

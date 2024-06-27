@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { IconCheck, IconLoader2, IconPlus, IconX } from "@tabler/icons-react";
 import { useGetAllCategoriesQuery } from "app/services/categoryService.ts";
 import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
 import { useCreatePizzaMutation } from "app/services/pizzaService.ts";
@@ -15,19 +15,22 @@ import { IPizzaSizePrice } from "interfaces/pizza.ts";
 import { PizzaCreateSchema, PizzaCreateSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import { UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { handleFileChange } from "utils/fileUtils.ts";
+import { showNotification } from "utils/showNotification.ts";
 
 import React, { useEffect, useRef, useState } from "react";
 
 const CreatePizzaPage: React.FC = () => {
   const [photos, setPhotos] = useState<File[]>([]);
+  const navigate = useNavigate();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { data: categories, isLoading: isLoadingCategories } = useGetAllCategoriesQuery();
   const { data: ingredients, isLoading: isLoadingIngredients } = useGetAllIngredientsQuery();
 
-  const [createPizza] = useCreatePizzaMutation();
+  const [createPizza, { isLoading: isLoadingCreate }] = useCreatePizzaMutation();
 
   const {
     register,
@@ -54,9 +57,14 @@ const CreatePizzaPage: React.FC = () => {
   }, [photos, setValue]);
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    try {
+      await createPizza({ ...data, photos: data.photos as File[], sizes: data.sizes as IPizzaSizePrice[] });
 
-    await createPizza({ ...data, photos: data.photos as File[], sizes: data.sizes as IPizzaSizePrice[] });
+      showNotification(`Успішно створено нову піццу!`, "success");
+      navigate(`/pizzas/list`);
+    } catch (error) {
+      showNotification(`Помилка при створенні нової піцци!`, "error");
+    }
   });
 
   const onReset = () => {
@@ -144,6 +152,23 @@ const CreatePizzaPage: React.FC = () => {
         </div>
 
         <div>
+          <Label>Sizes</Label>
+          <div className="p-2.5 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+            {fields.map((field, index) => (
+              <PizzaSizePriceFields key={field.id} errors={errors} index={index} register={register} removeSize={remove} />
+            ))}
+
+            <div className="flex justify-center">
+              <Button type="button" variant="primary" size="sm" onClick={() => append({ sizeId: -1, price: 200 })}>
+                <IconPlus /> Add Size
+              </Button>
+            </div>
+          </div>
+          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
+          {errors.sizes?.root && <p className="mt-2 text-sm text-red-600">{errors.sizes.root?.message}</p>}
+        </div>
+
+        <div>
           <Label>Images</Label>
           <FileInputMultiple files={photos} setFiles={setPhotos}>
             <Input
@@ -159,25 +184,11 @@ const CreatePizzaPage: React.FC = () => {
           {errors.photos && photos.length === 0 && <p className="mt-2 text-sm text-red-600">{errors.photos.message}</p>}
         </div>
 
-        <div>
-          <Label>Sizes</Label>
-          <div className="p-2.5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
-            {fields.map((field, index) => (
-              <PizzaSizePriceFields key={field.id} index={index} register={register} removeSize={remove} />
-            ))}
-            <Button type="button" variant="primary" size="sm" onClick={() => append({ sizeId: 0, price: 0 })}>
-              Add Size
-            </Button>
-          </div>
-          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
-          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
-        </div>
-
         <div className="flex justify-center gap-5">
-          <Button variant="success" size="sm" type="submit">
-            <IconCheck /> Submit
+          <Button disabled={isLoadingCreate} variant="success" size="sm" type="submit">
+            {isLoadingCreate ? <IconLoader2 className="animate-spin" /> : <IconCheck />} Submit
           </Button>
-          <Button variant="danger" size="sm" onClick={onReset}>
+          <Button disabled={isLoadingCreate} variant="danger" size="sm" onClick={onReset}>
             <IconX /> Reset
           </Button>
         </div>
