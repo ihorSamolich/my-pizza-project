@@ -4,6 +4,7 @@ import ConfirmDialog from "components/ConfirmDialog.tsx";
 import Pagination from "components/Pagination.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { IPizza } from "interfaces/pizza.ts";
+import { Link } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
 
 import React, { useState } from "react";
@@ -118,8 +119,9 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
 
               <td className="px-6 py-4 text-right">
                 <div className="flex space-x-5">
-                  <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
-
+                  <Link to={`/pizzas/edit/${pizza.id}`}>
+                    <button className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                  </Link>
                   <button
                     onClick={() => openDeleteConfirm(pizza.id)}
                     className="font-medium text-red-600 dark:text-red-500 hover:underline"

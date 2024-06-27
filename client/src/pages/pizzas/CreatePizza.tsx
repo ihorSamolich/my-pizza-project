@@ -4,7 +4,7 @@ import { useGetAllCategoriesQuery } from "app/services/categoryService.ts";
 import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
 import { useCreatePizzaMutation } from "app/services/pizzaService.ts";
 import PizzaSizePriceFields from "components/PizzaSizePriceFields.tsx";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import Checkbox from "components/ui/Checkbox.tsx";
 import FileInputMultiple from "components/ui/FileInputMultiple.tsx";
 import Input from "components/ui/Input.tsx";

@@ -16,6 +16,11 @@ export const pizzaApi = createApi({
       providesTags: ["Pizzas"],
     }),
 
+    getPizzaById: builder.query<IPizza, number>({
+      query: (id) => `getById/${id}`,
+      providesTags: (_result, _error, arg) => [{ type: "Pizzas", id: arg }],
+    }),
+
     getPagedPizzas: builder.query<IPagedDataResponse<IPizza>, IPizzaPagedRequest>({
       query: (params) => {
         const queryString = createQueryString(params as Record<string, any>);
@@ -47,4 +52,10 @@ export const pizzaApi = createApi({
   }),
 });
 
-export const { useGetAllPizzasQuery, useGetPagedPizzasQuery, useCreatePizzaMutation, useDeletePizzaMutation } = pizzaApi;
+export const {
+  useGetAllPizzasQuery,
+  useGetPizzaByIdQuery,
+  useGetPagedPizzasQuery,
+  useCreatePizzaMutation,
+  useDeletePizzaMutation,
+} = pizzaApi;

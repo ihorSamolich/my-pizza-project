@@ -1,6 +1,6 @@
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
 import { IconCheck, IconLoader2, IconX } from "@tabler/icons-react";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 
 import React from "react";
 

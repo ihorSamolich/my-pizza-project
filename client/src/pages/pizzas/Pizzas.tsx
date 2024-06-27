@@ -1,6 +1,6 @@
 import { IconCirclePlus } from "@tabler/icons-react";
 import { useGetPagedPizzasQuery } from "app/services/pizzaService.ts";
-import { Button } from "components/ui/Button.tsx";
+import Button from "components/ui/Button.tsx";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import PizzasTable from "partials/pizzas/PizzasTable.tsx";
 import { Link, useSearchParams } from "react-router-dom";

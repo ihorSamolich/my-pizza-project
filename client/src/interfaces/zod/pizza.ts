@@ -74,3 +74,25 @@ export const PizzaCreateSchema = z.object({
 });
 
 export type PizzaCreateSchemaType = z.infer<typeof PizzaCreateSchema>;
+
+export const PizzaEditSchema = z.object({
+  id: z.number(),
+
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(100, { message: "Name must be at most 100 characters long" }),
+
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters long" })
+    .max(500, { message: "Description must be at most 500 characters long" }),
+
+  categoryId: z.string().refine((val) => !isNaN(parseFloat(val)) && parseFloat(val) !== 0, {
+    message: "Category is required",
+  }),
+
+  ingredientIds: z.array(z.number()).nonempty("Ingredients must cannot be empty"),
+});
+
+export type PizzaEditSchemaType = z.infer<typeof PizzaEditSchema>;
