@@ -1,27 +1,26 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconX } from "@tabler/icons-react";
+import { IconCheck, IconLoader2, IconPlus, IconX } from "@tabler/icons-react";
 import { useGetAllCategoriesQuery } from "app/services/categoryService.ts";
 import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
-import { useGetPizzaByIdQuery } from "app/services/pizzaService.ts";
+import { useEditPizzaMutation, useGetPizzaByIdQuery } from "app/services/pizzaService.ts";
 import LoadingSpinner from "components/LoadingSpinner.tsx";
-import Button from "components/ui/Button.tsx";
-import Checkbox from "components/ui/Checkbox.tsx";
-import Input from "components/ui/Input.tsx";
-import Label from "components/ui/Label.tsx";
-import Select from "components/ui/Select.tsx";
-import TextArea from "components/ui/TextArea.tsx";
+import PizzaSizePriceFields from "components/PizzaSizePriceFields.tsx";
+import { Button, Checkbox, Input, Label, Select, TextArea } from "components/ui";
 import { IPizza } from "interfaces/pizza.ts";
 import { PizzaEditSchema, PizzaEditSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import { Helmet } from "react-helmet";
-import { useForm } from "react-hook-form";
-import { useParams } from "react-router-dom";
+import { UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+import { API_URL } from "utils/envData.ts";
+import { showNotification } from "utils/showNotification.ts";
+import { convertUrlsToFiles, urlToFile } from "utils/urlToFile.ts";
 
 import React, { useEffect } from "react";
 
 const EditPizzaPage: React.FC = () => {
   const { id } = useParams();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const {
     register,
@@ -30,21 +29,38 @@ const EditPizzaPage: React.FC = () => {
     reset,
     setValue,
     getValues,
+    control,
   } = useForm<PizzaEditSchemaType>({ resolver: zodResolver(PizzaEditSchema) });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sizes",
+  });
 
   const { data: pizza, isLoading: isPizzaLoading } = useGetPizzaByIdQuery(Number(id));
   const { data: categories, isLoading: isLoadingCategories } = useGetAllCategoriesQuery();
   const { data: ingredients, isLoading: isLoadingIngredients } = useGetAllIngredientsQuery();
+
+  const [update, { isLoading: isLoadingUpdate }] = useEditPizzaMutation();
 
   useEffect(() => {
     getDefaultPizza(pizza);
   }, [pizza, setValue]);
 
   const onSubmit = async (data: PizzaEditSchemaType) => {
-    console.log(data);
+    try {
+      console.log(data);
+      // await update({ ...data });
+
+      showNotification(`Успішно змінено піццу!`, "success");
+      navigate(`/pizzas/list`);
+    } catch (error) {
+      showNotification(`Помилка при зміненні піцци!`, "error");
+    }
+    // console.log(data);
   };
 
-  const getDefaultPizza = (pizza?: IPizza) => {
+  const getDefaultPizza = async (pizza?: IPizza) => {
     if (pizza) {
       setValue("id", pizza.id);
       setValue("name", pizza.name);
@@ -56,6 +72,44 @@ const EditPizzaPage: React.FC = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         pizza.ingredients.map((ingredient) => ingredient.id),
+      );
+
+      setValue(
+        "sizes",
+        pizza.sizes.map((size) => ({ sizeId: size.sizeId, price: size.price })),
+      );
+
+      const files = await convertUrlsToFiles(pizza.photos.map((photo) => `${API_URL}/images/1200_${photo.name}`));
+      setValue("photos", files);
+
+      // setValue(
+      //   "photos",
+      //   pizza.photos.map((photo) => urlToFile(photo.name)),
+      // );
+    }
+  };
+
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setValue: UseFormSetValue<PizzaEditSchemaType>,
+    getValues: UseFormGetValues<PizzaEditSchemaType>,
+  ) => {
+    const { value, checked } = event.target;
+    const currentValues = getValues("ingredientIds") || [];
+
+    if (checked) {
+      setValue("ingredientIds", [...currentValues, parseInt(value)], {
+        shouldValidate: true,
+      });
+    } else {
+      setValue(
+        "ingredientIds",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        currentValues.filter((val) => val !== parseInt(value)),
+        {
+          shouldValidate: true,
+        },
       );
     }
   };
@@ -117,13 +171,31 @@ const EditPizzaPage: React.FC = () => {
                   type="checkbox"
                   disabled={isLoadingIngredients}
                   value={ingredient.id}
-                  defaultChecked={getValues("ingredientIds")?.includes(ingredient.id)}
+                  onChange={(event) => handleCheckboxChange(event, setValue, getValues)}
+                  defaultChecked={pizza?.ingredients.map((ingredient) => ingredient.id)?.includes(ingredient.id)}
                 />
                 <span>{ingredient.name}</span>
               </Label>
             ))}
           </div>
           {errors.ingredientIds && <p className="mt-2 text-sm text-red-600">{errors.ingredientIds.message}</p>}
+        </div>
+
+        <div>
+          <Label>Sizes</Label>
+          <div className="p-2.5 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 w-full dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 dark:shadow-sm-light">
+            {fields.map((field, index) => (
+              <PizzaSizePriceFields key={field.id} errors={errors} index={index} register={register} removeSize={remove} />
+            ))}
+
+            <div className="flex justify-center">
+              <Button type="button" variant="primary" size="sm" onClick={() => append({ sizeId: -1, price: 200 })}>
+                <IconPlus /> Add Size
+              </Button>
+            </div>
+          </div>
+          {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
+          {errors.sizes?.root && <p className="mt-2 text-sm text-red-600">{errors.sizes.root?.message}</p>}
         </div>
 
         <div className="hidden">
@@ -133,10 +205,10 @@ const EditPizzaPage: React.FC = () => {
         </div>
 
         <div className="flex justify-center gap-5">
-          <Button variant="success" size="sm" type="submit">
-            Submit
+          <Button disabled={isLoadingUpdate} variant="success" size="sm" type="submit">
+            {isLoadingUpdate ? <IconLoader2 className="animate-spin" /> : <IconCheck />} Submit
           </Button>
-          <Button onClick={handleReset} variant="danger" size="sm" type="button">
+          <Button disabled={isLoadingUpdate} onClick={handleReset} variant="danger" size="sm" type="button">
             <IconX /> Reset
           </Button>
         </div>

@@ -5,6 +5,7 @@ import { IPaginationOptions } from "interfaces/pagination.ts";
 
 export interface IPizzaSize {
   id: number;
+  sizeId: number;
   sizeName: string;
   price: number;
 }
@@ -43,4 +44,14 @@ export interface IPizzaSize {
 
 export interface IPizzaPagedRequest extends IPaginationOptions {
   name?: string;
+}
+
+export interface IPizzaEdit {
+  id: number;
+  name: string;
+  description: string;
+  categoryId: string;
+  ingredientIds: number[];
+  sizes: IPizzaSizePrice[];
+  // photos: File[];
 }

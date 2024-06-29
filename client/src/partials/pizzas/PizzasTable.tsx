@@ -1,6 +1,7 @@
 import { IconCircleOff } from "@tabler/icons-react";
 import { useDeletePizzaMutation } from "app/services/pizzaService.ts";
 import ConfirmDialog from "components/ConfirmDialog.tsx";
+import EmptyData from "components/EmptyData.tsx";
 import Pagination from "components/Pagination.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { IPizza } from "interfaces/pizza.ts";
@@ -48,7 +49,7 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
               <span className="sr-only">Image</span>
             </th>
             <th scope="col" className="px-6 py-3">
-              Pizza name
+              Name
             </th>
             <th scope="col" className="px-6 py-3">
               Category
@@ -142,6 +143,9 @@ const PizzasTable: React.FC<PizzasTableProps> = (props) => {
         action={handleDelete}
         actionProcessing={isDeleting}
       />
+
+      {/* No data */}
+      {!isLoading && !pizzas?.length && <EmptyData pathTo="/pizzas/create" />}
 
       <Pagination totalPages={pagesAvailable} />
     </div>

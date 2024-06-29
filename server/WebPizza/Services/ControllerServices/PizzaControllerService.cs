@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using WebPizza.Data;
 using WebPizza.Data.Entities;
@@ -100,6 +101,75 @@ namespace WebPizza.Services.ControllerServices
             {
                 throw;
             }
+        }
+
+        public async Task UpdateAsync(PizzaEditVm vm)
+        {
+            var pizza = await pizzaContext.Pizzas
+                    .Include(x => x.Photos)
+                    .Include(x => x.Ingredients)
+                    .Include(x => x.Category)
+                    .Include(x => x.Sizes)
+                .FirstOrDefaultAsync(c => c.Id == vm.Id);
+
+            try
+            {
+                if (pizza == null)
+                {
+                    throw new Exception("Pizza not found");
+                }
+
+                if (vm.Name != null)
+                {
+                    pizza.Name = vm.Name;
+                }
+
+                if (vm.Description != null)
+                {
+                    pizza.Description = vm.Description;
+                }
+
+                if (vm.CategoryId != null)
+                {
+                    pizza.CategoryId = (int)vm.CategoryId;
+                }
+
+                if (vm.IngredientIds != null && vm.IngredientIds.Any())
+                {
+                    pizza.Ingredients.Clear();
+
+                    foreach (var ingredientId in vm.IngredientIds)
+                    {
+                        pizza.Ingredients.Add(new PizzaIngredientEntity
+                        {
+                            IngredientId = ingredientId
+                        });
+                    }
+                }
+
+                if (vm.Sizes != null && vm.Sizes.Any())
+                {
+                    pizza.Sizes.Clear();
+
+                    foreach (var size in vm.Sizes)
+                    {
+                        pizza.Sizes.Add(new PizzaSizePriceEntity
+                        {
+                            SizeId = size.SizeId,
+                            Price = size.Price
+                        });
+                    }
+                }
+
+                pizzaContext.Pizzas.Update(pizza);
+                await pizzaContext.SaveChangesAsync();
+
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
         }
     }
 }

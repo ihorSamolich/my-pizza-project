@@ -1,9 +1,9 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { IPagedDataResponse } from "interfaces/index.ts";
-import { IPizza, IPizzaCreate, IPizzaPagedRequest } from "interfaces/pizza.ts";
+import { IPizza, IPizzaCreate, IPizzaEdit, IPizzaPagedRequest } from "interfaces/pizza.ts";
 import { createBaseQuery } from "utils/baseQuery.ts";
 import { createQueryString } from "utils/createQueryString.ts";
-import { generatePizzaCreateFormData } from "utils/formData/pizza/generatePizzaCreateFormData.ts";
+import { generatePizzaCreateFormData, generatePizzaEditFormData } from "utils/formData/pizza/generatePizzaCreateFormData.ts";
 
 export const pizzaApi = createApi({
   reducerPath: "pizzaApi",
@@ -42,6 +42,19 @@ export const pizzaApi = createApi({
       invalidatesTags: ["Pizzas"],
     }),
 
+    editPizza: builder.mutation<void, IPizzaEdit>({
+      query: (pizza) => {
+        const formData = generatePizzaEditFormData(pizza);
+
+        return {
+          url: "update",
+          method: "PATCH",
+          body: formData,
+        };
+      },
+      invalidatesTags: ["Pizzas"],
+    }),
+
     deletePizza: builder.mutation<void, number>({
       query: (id) => ({
         url: `delete/${id}`,
@@ -54,6 +67,7 @@ export const pizzaApi = createApi({
 
 export const {
   useGetAllPizzasQuery,
+  useEditPizzaMutation,
   useGetPizzaByIdQuery,
   useGetPagedPizzasQuery,
   useCreatePizzaMutation,

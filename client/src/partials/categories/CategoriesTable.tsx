@@ -1,5 +1,6 @@
 import { useDeleteCategoryMutation } from "app/services/categoryService";
 import ConfirmDialog from "components/ConfirmDialog";
+import EmptyData from "components/EmptyData.tsx";
 import Pagination from "components/Pagination.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { ICategory } from "interfaces/category";
@@ -89,6 +90,9 @@ const CategoriesTable: React.FC<CategoriesTableProps> = (props) => {
           ))}
         </tbody>
       </table>
+
+      {/* No data */}
+      {!isLoading && !categories?.length && <EmptyData pathTo="/categories/create" />}
 
       <Pagination totalPages={pagesAvailable} />
 

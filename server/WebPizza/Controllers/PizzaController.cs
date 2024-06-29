@@ -8,6 +8,7 @@ using WebPizza.Services.ControllerServices.Interfaces;
 using WebPizza.Services.Interfaces;
 using FluentValidation;
 using WebPizza.ViewModels.Category;
+using WebPizza.ViewModels.Ingredient;
 
 namespace WebPizza.Controllers;
 
@@ -83,6 +84,29 @@ public class PizzaController(IMapper mapper,
             return StatusCode(500, ex.Message);
         }
     }
+
+
+    [HttpPatch]
+    public async Task<IActionResult> Update([FromForm] PizzaEditVm vm)
+    {
+        //var validationResult = await editValidator.ValidateAsync(vm);
+
+        //if (!validationResult.IsValid)
+        //{
+        //    return BadRequest(validationResult.Errors);
+        //}
+
+        try
+        {
+            await service.UpdateAsync(vm);
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
+    }
+
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)

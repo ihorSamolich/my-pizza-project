@@ -1,5 +1,6 @@
 import { useDeleteIngredientMutation } from "app/services/ingredientService.ts";
 import ConfirmDialog from "components/ConfirmDialog.tsx";
+import EmptyData from "components/EmptyData.tsx";
 import TableCategoriesSkeleton from "components/skeletons/TableCategoriesSkeleton.tsx";
 import { ICategory } from "interfaces/category";
 import { Link } from "react-router-dom";
@@ -88,6 +89,9 @@ const IngredientsTable: React.FC<IngredientsTableProps> = (props) => {
           ))}
         </tbody>
       </table>
+
+      {/* No data */}
+      {!isLoading && !ingredients?.length && <EmptyData pathTo="/ingredients/create" />}
 
       {/*<Pagination totalPages={pagesAvailable} />*/}
 

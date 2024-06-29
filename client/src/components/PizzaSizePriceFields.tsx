@@ -1,23 +1,28 @@
 import { IconTrash } from "@tabler/icons-react";
 import { useGetAllPizzaSizesQuery } from "app/services/pizzaSizeService.ts";
+import LoadingSpinner from "components/LoadingSpinner.tsx";
 import Button from "components/ui/Button.tsx";
 import Input from "components/ui/Input.tsx";
 import Label from "components/ui/Label.tsx";
 import Select from "components/ui/Select.tsx";
-import { PizzaCreateSchemaType } from "interfaces/zod/pizza.ts";
+import { PizzaCreateSchemaType, PizzaEditSchemaType } from "interfaces/zod/pizza.ts";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 import React from "react";
 
 interface PizzaSizePriceFieldsProps {
   index: number;
-  register: UseFormRegister<PizzaCreateSchemaType>;
-  errors: FieldErrors<PizzaCreateSchemaType>;
+  register: UseFormRegister<any>;
+  errors: FieldErrors<PizzaCreateSchemaType | PizzaEditSchemaType>;
   removeSize: (index: number) => void;
 }
 
 const PizzaSizePriceFields: React.FC<PizzaSizePriceFieldsProps> = ({ index, register, errors, removeSize }) => {
   const { data: sizes, isLoading: isLoadingPizzaSizes } = useGetAllPizzaSizesQuery();
+
+  if (isLoadingPizzaSizes) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="flex flex-col w-full mb-4 pb-2 gap-2 ">
@@ -26,7 +31,7 @@ const PizzaSizePriceFields: React.FC<PizzaSizePriceFieldsProps> = ({ index, regi
         <Select
           {...register(`sizes.${index}.sizeId`)}
           disabled={isLoadingPizzaSizes}
-          defaultValue="-1"
+          // defaultValue={sizeId}
           id={`sizes[${index}].sizeId`}
         >
           <option disabled value="-1">

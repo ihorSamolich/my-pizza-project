@@ -1,5 +1,7 @@
 import { Dialog, DialogPanel, Transition, TransitionChild } from "@headlessui/react";
-import { IconReceipt, IconSearch } from "@tabler/icons-react";
+import { IconSearch } from "@tabler/icons-react";
+import { useGetPagedCategoriesQuery } from "app/services/categoryService.ts";
+import { useGetPagedPizzasQuery } from "app/services/pizzaService.ts";
 import { Link } from "react-router-dom";
 
 import React, { useRef } from "react";
@@ -12,6 +14,16 @@ interface SearchModalProps {
 const SearchModal: React.FC<SearchModalProps> = (props) => {
   const { isOpen, close } = props;
   const searchInput = useRef<HTMLInputElement>(null);
+
+  const { data: pizzas } = useGetPagedPizzasQuery({
+    pageIndex: 0,
+    pageSize: 5,
+  });
+
+  const { data: categories } = useGetPagedCategoriesQuery({
+    pageIndex: 0,
+    pageSize: 3,
+  });
 
   return (
     <Transition appear show={isOpen}>
@@ -53,102 +65,39 @@ const SearchModal: React.FC<SearchModalProps> = (props) => {
                   </div>
                 </form>
                 <div className="py-4 px-2">
-                  {/* Recent searches */}
+                  {/* Pizzas */}
                   <div className="mb-3 last:mb-0">
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase px-2 mb-2">
-                      Recent searches
-                    </div>
+                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase px-2 mb-2">Pizzas</div>
+
                     <ul className="text-sm">
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Form Builder - 23 hours on-demand video</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Access Mosaic on mobile and TV</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Product Update - Q4 2021</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Master Digital Marketing Strategy course</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Dedicated forms for products</span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>Product Update - Q4 2021</span>
-                        </Link>
-                      </li>
+                      {pizzas?.data.map((pizza) => (
+                        <li key={pizza.id}>
+                          <Link
+                            className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                            to={`/pizzas/edit/${pizza.id}`}
+                          >
+                            <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
+                            <span>{pizza.name}</span>
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </div>
-                  {/* Recent pages */}
+                  {/*Categories */}
                   <div className="mb-3 last:mb-0">
-                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase px-2 mb-2">
-                      Recent pages
-                    </div>
+                    <div className="text-xs font-semibold text-slate-400 dark:text-slate-500 uppercase px-2 mb-2">Categories</div>
                     <ul className="text-sm">
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconReceipt className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>
-                            <span className="font-medium">Messages</span> -{" "}
-                            <span className="text-slate-600 dark:text-slate-400 group-hover:text-white">
-                              Conversation / … / Mike Mills
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
-                          to="#0"
-                        >
-                          <IconReceipt className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
-                          <span>
-                            <span className="font-medium">Messages</span> -{" "}
-                            <span className="text-slate-600 dark:text-slate-400 group-hover:text-white">
-                              Conversation / … / Eva Patrick
-                            </span>
-                          </span>
-                        </Link>
-                      </li>
+                      {categories?.data?.map((category) => (
+                        <li key={category.id}>
+                          <Link
+                            className="flex items-center p-2 text-slate-800 dark:text-slate-100 hover:text-white hover:bg-indigo-500 rounded group"
+                            to={`/categories/edit/${category.id}`}
+                          >
+                            <IconSearch className="w-5 h-5 text-slate-400 dark:text-slate-500 group-hover:text-white group-hover:text-opacity-50 shrink-0 mr-3" />
+                            <span>{category.name}</span>
+                          </Link>
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </div>
