@@ -28,22 +28,29 @@ public static class SeederDB
             {
                 Faker faker = new Faker();
 
-                var fakeCategory = new Faker<CategoryEntity>("uk")
-                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow.AddDays(f.Random.Int(-10, -1)))
-                    .RuleFor(c => c.Name, f => f.Commerce.Product());
+                var fakeCategories = configuration
+                    .GetSection("DefaultSeedData:PizzaCategories")
+                    .Get<string[]>();
 
-                var fakeCategories = fakeCategory.Generate(10);
+                if (fakeCategories is null)
+                    throw new Exception("Configuration DefaultSeedData:PizzaCategories is invalid");
 
-                foreach (var category in fakeCategories)
+                var categoryEntities = fakeCategories.Select(name => new CategoryEntity
                 {
-                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "dish", width: 1000, height: 800);
+                    Name = name,
+                    DateCreated = DateTime.UtcNow.AddDays(faker.Random.Int(-10, -1))
+                }).ToList();
+
+                foreach (var category in categoryEntities)
+                {
+                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "pizza", width: 1000, height: 800);
                     var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
 
                     category.Image = await imageService.SaveImageAsync(imageBase64);
                 }
 
-                context.Categories.AddRange(fakeCategories);
-                context.SaveChanges();
+                context.Categories.AddRange(categoryEntities);
+                await context.SaveChangesAsync();
             }
 
             // Ingredient seed
@@ -51,22 +58,29 @@ public static class SeederDB
             {
                 Faker faker = new Faker();
 
-                var fakeIngredient = new Faker<IngredientEntity>("uk")
-                    .RuleFor(o => o.DateCreated, f => DateTime.UtcNow.AddDays(f.Random.Int(-10, -1)))
-                    .RuleFor(c => c.Name, f => f.Commerce.ProductMaterial());
+                var fakeIngredients = configuration
+                    .GetSection("DefaultSeedData:PizzaIngredients")
+                    .Get<string[]>();
 
-                var fakeIngredients = fakeIngredient.Generate(10);
+                if (fakeIngredients is null)
+                    throw new Exception("Configuration DefaultSeedData:PizzaIngredients is invalid");
 
-                foreach (var ingredient in fakeIngredients)
+                var ingredientEntities = fakeIngredients.Select(name => new IngredientEntity
                 {
-                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "fruit", width: 1000, height: 800);
+                    Name = name,
+                    DateCreated = DateTime.UtcNow.AddDays(faker.Random.Int(-10, -1))
+                }).ToList();
+
+                foreach (var ingredient in ingredientEntities)
+                {
+                    var imageUrl = faker.Image.LoremFlickrUrl(keywords: "food", width: 1000, height: 800);
                     var imageBase64 = await GetImageAsBase64Async(httpClient, imageUrl);
 
                     ingredient.Image = await imageService.SaveImageAsync(imageBase64);
                 }
 
-                context.Ingredients.AddRange(fakeIngredients);
-                context.SaveChanges();
+                context.Ingredients.AddRange(ingredientEntities);
+                await context.SaveChangesAsync();
             }
 
             // Sizes seed
@@ -95,16 +109,23 @@ public static class SeederDB
             {
                 var faker = new Faker("en");
 
-                var fakePizzas = new Faker<PizzaEntity>("uk")
-                    .RuleFor(o => o.Name, f => f.Commerce.ProductName())
-                    .RuleFor(o => o.Description, f => f.Lorem.Sentence())
-                    .RuleFor(o => o.Rating, f => f.Random.Double(0, 5))
-                    .RuleFor(o => o.IsAvailable, f => f.Random.Bool())
-                    .RuleFor(o => o.CategoryId, f => f.PickRandom(context.Categories.Select(c => c.Id).ToList()));
+                var pizzaNames = configuration
+                    .GetSection("DefaultSeedData:PizzaNames")
+                    .Get<string[]>();
 
-                var pizzas = fakePizzas.Generate(10);
+                if (pizzaNames is null)
+                    throw new Exception("Configuration DefaultSeedData:PizzaNames is invalid");
 
-                foreach (var pizza in pizzas)
+                var fakePizzas = pizzaNames.Select(name => new PizzaEntity
+                {
+                    Name = name,
+                    Description = faker.Lorem.Sentence(),
+                    Rating = faker.Random.Double(0, 5),
+                    IsAvailable = faker.Random.Bool(),
+                    CategoryId = faker.PickRandom(context.Categories.Select(c => c.Id).ToList())
+                }).ToList();
+
+                foreach (var pizza in fakePizzas)
                 {
                     int numberOfPhotos = faker.Random.Int(1, 5);
                     for (int i = 0; i < numberOfPhotos; i++)
@@ -121,13 +142,13 @@ public static class SeederDB
 
                     pizza.Ingredients = context.Ingredients
                         .OrderBy(i => Guid.NewGuid())
-                        .Take(new Faker().Random.Int(1, 5))
+                        .Take(faker.Random.Int(1, 5))
                         .Select(i => new PizzaIngredientEntity { IngredientId = i.Id })
                         .ToList();
 
                     pizza.Sizes = context.Sizes
                         .OrderBy(i => Guid.NewGuid())
-                        .Take(new Faker().Random.Int(1, 5))
+                        .Take(faker.Random.Int(1, 5))
                         .Select(s => new PizzaSizePriceEntity
                         {
                             SizeId = s.Id,
@@ -136,9 +157,10 @@ public static class SeederDB
                         .ToList();
                 }
 
-                context.Pizzas.AddRange(pizzas);
+                context.Pizzas.AddRange(fakePizzas);
                 await context.SaveChangesAsync();
             }
+
         }
     }
 

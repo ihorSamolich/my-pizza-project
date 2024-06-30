@@ -161,6 +161,32 @@ namespace WebPizza.Services.ControllerServices
                     }
                 }
 
+                if (vm.Photos != null && vm.Photos.Any())
+                {
+                    foreach (var photo in pizza.Photos)
+                    {
+                        imageService.DeleteImageIfExists(photo.Name);
+                    }
+
+                    pizza.Photos.Clear();
+                }
+
+
+                if (vm.Photos != null && vm.Photos.Any())
+                {
+                    int priorityIndex = 1;
+
+                    foreach (var photo in vm.Photos)
+                    {
+                        pizza.Photos.Add(new PizzaPhotoEntity
+                        {
+                            Name = await imageService.SaveImageAsync(photo),
+                            Priority = priorityIndex
+                        });
+                        priorityIndex++;
+                    }
+                }
+
                 pizzaContext.Pizzas.Update(pizza);
                 await pizzaContext.SaveChangesAsync();
 

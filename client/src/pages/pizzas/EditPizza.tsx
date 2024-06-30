@@ -5,22 +5,27 @@ import { useGetAllIngredientsQuery } from "app/services/ingredientService.ts";
 import { useEditPizzaMutation, useGetPizzaByIdQuery } from "app/services/pizzaService.ts";
 import LoadingSpinner from "components/LoadingSpinner.tsx";
 import PizzaSizePriceFields from "components/PizzaSizePriceFields.tsx";
-import { Button, Checkbox, Input, Label, Select, TextArea } from "components/ui";
-import { IPizza } from "interfaces/pizza.ts";
+import { Button, Checkbox, FileInputMultiple, Input, Label, Select, TextArea } from "components/ui";
+import { IPizza, IPizzaSizePrice } from "interfaces/pizza.ts";
 import { PizzaEditSchema, PizzaEditSchemaType } from "interfaces/zod/pizza.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import { Helmet } from "react-helmet";
 import { UseFormGetValues, UseFormSetValue, useFieldArray, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_URL } from "utils/envData.ts";
+import { handleFileChange } from "utils/fileUtils.ts";
 import { showNotification } from "utils/showNotification.ts";
-import { convertUrlsToFiles, urlToFile } from "utils/urlToFile.ts";
+import { convertUrlsToFiles } from "utils/urlToFile.ts";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const EditPizzaPage: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [photos, setPhotos] = useState<File[]>([]);
 
   const {
     register,
@@ -47,17 +52,25 @@ const EditPizzaPage: React.FC = () => {
     getDefaultPizza(pizza);
   }, [pizza, setValue]);
 
+  useEffect(() => {
+    if (inputRef.current) {
+      const dataTransfer = new DataTransfer();
+      photos.forEach((file) => dataTransfer.items.add(file));
+      inputRef.current.files = dataTransfer.files;
+    }
+    setValue("photos", inputRef.current?.files as any);
+  }, [photos, setValue]);
+
   const onSubmit = async (data: PizzaEditSchemaType) => {
     try {
       console.log(data);
-      // await update({ ...data });
+      await update({ ...data, photos: data.photos as File[], sizes: data.sizes as IPizzaSizePrice[] });
 
       showNotification(`Успішно змінено піццу!`, "success");
       navigate(`/pizzas/list`);
     } catch (error) {
       showNotification(`Помилка при зміненні піцци!`, "error");
     }
-    // console.log(data);
   };
 
   const getDefaultPizza = async (pizza?: IPizza) => {
@@ -80,12 +93,8 @@ const EditPizzaPage: React.FC = () => {
       );
 
       const files = await convertUrlsToFiles(pizza.photos.map((photo) => `${API_URL}/images/1200_${photo.name}`));
+      setPhotos(files);
       setValue("photos", files);
-
-      // setValue(
-      //   "photos",
-      //   pizza.photos.map((photo) => urlToFile(photo.name)),
-      // );
     }
   };
 
@@ -196,6 +205,22 @@ const EditPizzaPage: React.FC = () => {
           </div>
           {errors.sizes && <p className="mt-2 text-sm text-red-600">{errors.sizes.message}</p>}
           {errors.sizes?.root && <p className="mt-2 text-sm text-red-600">{errors.sizes.root?.message}</p>}
+        </div>
+
+        <div>
+          <Label>Images</Label>
+          <FileInputMultiple files={photos} setFiles={setPhotos}>
+            <Input
+              {...register("photos")}
+              onChange={(e) => handleFileChange(e, setPhotos)}
+              multiple
+              ref={inputRef}
+              id="photos"
+              type="file"
+              variant="file"
+            />
+          </FileInputMultiple>
+          {errors.photos && photos.length === 0 && <p className="mt-2 text-sm text-red-600">{errors.photos.message}</p>}
         </div>
 
         <div className="hidden">

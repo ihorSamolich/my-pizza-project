@@ -37,8 +37,6 @@ builder.Services.AddTransient<IIngredientControllerService, IngredientController
 builder.Services.AddTransient<IPizzaControllerService, PizzaControllerService>();
 builder.Services.AddTransient<IPaginationService<PizzaVm, PizzaFilterVm>, PizzaPaginationService>();
 
-
-
 var app = builder.Build();
 
 string imagesDirPath = Path.Combine(Directory.GetCurrentDirectory(), builder.Configuration["ImagesDir"]);
@@ -48,18 +46,20 @@ if (!Directory.Exists(imagesDirPath))
     Directory.CreateDirectory(imagesDirPath);
 }
 
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(imagesDirPath),
-    RequestPath = "/images"
-});
 
+// Для редагування фото
 app.UseCors(
     configuration => configuration
         .AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod()
 );
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesDirPath),
+    RequestPath = "/images"
+});
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -13,7 +13,7 @@ namespace WebPizza.ViewModels.Pizza
         public int? CategoryId { get; set; }
 
         // Список фото
-        //public IEnumerable<IFormFile>? Photos { get; set; } = null!;
+        public IEnumerable<IFormFile>? Photos { get; set; } = null!;
 
         // Список інгредієнтів
         public IEnumerable<int>? IngredientIds { get; set; } = null!;
