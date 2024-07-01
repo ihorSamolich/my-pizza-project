@@ -1,9 +1,11 @@
 import { IPaginationOptions } from "interfaces/pagination.ts";
+import { IPizza } from "interfaces/pizza.ts";
 
 export interface ICategory {
   id: number;
   name: string;
   image: string;
+  pizzas: IPizza[];
 }
 
 export interface ICategoryCreate {

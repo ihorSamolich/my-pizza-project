@@ -1,4 +1,6 @@
-﻿namespace WebPizza.ViewModels.Category
+﻿using WebPizza.ViewModels.Pizza;
+
+namespace WebPizza.ViewModels.Category
 {
     public class CategoryVm
     {
@@ -6,5 +8,8 @@
         public string Name { get; set; } = null!;
         public string Image { get; set; } = null!;
         public DateTime DateCreated { get; set; }
+
+        public IEnumerable<PizzaVm> Pizzas { get; set; } = null!;
+
     }
 }
