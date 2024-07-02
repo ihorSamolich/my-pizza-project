@@ -14,9 +14,24 @@ namespace WebPizza.Controllers
     [ApiController]
     public class AccountsController(
         IJwtTokenService jwtTokenService,
-        IAccountsControllerService service
+        IAccountsControllerService service,
+        UserManager<UserEntity> userManager
     ) : ControllerBase
     {
+        [HttpPost]
+        public async Task<IActionResult> SignIn([FromForm] SignInVm model)
+        {
+            UserEntity? user = await userManager.FindByEmailAsync(model.Email);
+
+            if (user is null || !await userManager.CheckPasswordAsync(user, model.Password))
+                return Unauthorized("Wrong authentication data");
+
+            return Ok(new JwtTokenResponse
+            {
+                Token = await jwtTokenService.CreateTokenAsync(user)
+            });
+        }
+
         [HttpPost]
         public async Task<IActionResult> Registration([FromForm] RegisterVm vm)
         {
