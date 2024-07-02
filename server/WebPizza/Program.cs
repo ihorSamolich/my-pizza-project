@@ -1,8 +1,13 @@
 using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using WebPizza.Data;
 using WebPizza.Data.Entities;
+using WebPizza.Data.Entities.Identity;
 using WebPizza.Mapper;
 using WebPizza.Services;
 using WebPizza.Services.ControllerServices;
@@ -18,6 +23,50 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PizzaDbContext>(opt =>
     opt.UseNpgsql(builder.Configuration.GetConnectionString("Npgsql")));
 
+builder.Services
+    .AddIdentity<UserEntity, RoleEntity>(options =>
+    {
+        options.Stores.MaxLengthForKeys = 128;
+
+        options.Password.RequiredLength = 8;
+        options.Password.RequireDigit = false;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireLowercase = false;
+    })
+    .AddEntityFrameworkStores<PizzaDbContext>()
+    .AddDefaultTokenProviders();
+
+var singinKey = new SymmetricSecurityKey(
+    Encoding.UTF8.GetBytes(
+        builder.Configuration["Authentication:Jwt:SecretKey"]
+            ?? throw new NullReferenceException("Authentication:Jwt:SecretKey")
+    )
+);
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.SaveToken = true;
+        options.RequireHttpsMetadata = false;
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            IssuerSigningKey = singinKey,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -26,8 +75,11 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddTransient<IImageService, ImageService>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
+
+builder.Services.AddTransient<IAccountsControllerService, AccountsControllerService>();
 
 builder.Services.AddTransient<ICategoryControllerService, CategoryControllerService>();
 builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, CategoryPaginationService>();

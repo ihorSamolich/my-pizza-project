@@ -1,9 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebPizza.Data.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using WebPizza.Data.Entities.Identity;
 
 namespace WebPizza.Data
 {
-    public class PizzaDbContext : DbContext
+    public class PizzaDbContext : IdentityDbContext<UserEntity, RoleEntity, int,
+        IdentityUserClaim<int>, UserRoleEntity, IdentityUserLogin<int>,
+        IdentityRoleClaim<int>, IdentityUserToken<int>>
     {
         public PizzaDbContext(DbContextOptions<PizzaDbContext> options) : base(options) { }
 
@@ -20,6 +25,21 @@ namespace WebPizza.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            // UserRoleEntity builder
+            modelBuilder.Entity<UserRoleEntity>(ur =>
+            {
+                ur.HasKey(ur => new { ur.UserId, ur.RoleId });
+                ur.HasOne(ur => ur.Role)
+                    .WithMany(r => r.UserRoles)
+                    .HasForeignKey(r => r.RoleId)
+                    .IsRequired();
+                ur.HasOne(ur => ur.User)
+                    .WithMany(u => u.UserRoles)
+                    .HasForeignKey(u => u.UserId)
+                    .IsRequired();
+            });
+
 
             // PizzaIngredients builder
             modelBuilder.Entity<PizzaIngredientEntity>()

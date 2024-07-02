@@ -1,0 +1,39 @@
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using WebPizza.Constants;
+using WebPizza.Data.Entities.Identity;
+using WebPizza.Services.ControllerServices.Interfaces;
+using WebPizza.Services.Interfaces;
+using WebPizza.ViewModels.Account;
+using WebPizza.Services;
+
+namespace WebPizza.Controllers
+{
+
+    [Route("api/[controller]/[action]")]
+    [ApiController]
+    public class AccountsController(
+        IJwtTokenService jwtTokenService,
+        IAccountsControllerService service
+    ) : ControllerBase
+    {
+        [HttpPost]
+        public async Task<IActionResult> Registration([FromForm] RegisterVm vm)
+        {
+            try
+            {
+                var user = await service.SignUpAsync(vm);
+
+                return Ok(new JwtTokenResponse
+                {
+                    Token = await jwtTokenService.CreateTokenAsync(user)
+                });
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Exception create user!");
+            }
+        }
+
+    }
+}
