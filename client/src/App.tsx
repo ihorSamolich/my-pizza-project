@@ -13,12 +13,17 @@ const CreateIngredientPage = lazyWithDelay(() => import("pages/ingredients/Creat
 const EditIngredientPage = lazyWithDelay(() => import("pages/ingredients/EditIngredient.tsx"));
 const CreatePizzaPage = lazyWithDelay(() => import("pages/pizzas/CreatePizza.tsx"));
 const EditPizzaPage = lazyWithDelay(() => import("pages/pizzas/EditPizza.tsx"));
+const LoginPage = lazyWithDelay(() => import("pages/Login.tsx"));
 
 const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Dashboard />} />
+
+        <Route path="auth">
+          <Route path="sign-in" element={<LoginPage />} />
+        </Route>
 
         <Route path="categories">
           <Route path="list" element={<CategoriesPage />} />

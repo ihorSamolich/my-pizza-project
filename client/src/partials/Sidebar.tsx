@@ -263,7 +263,7 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                         Authentication
                         <ChevronDown open={open} />
                       </SidebarLinkGroupTitle>
-                      <SidebarLinkGroupMenu open={open} links={[{ to: "/auth/login", label: "Login" }]} />
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/auth/sign-in", label: "Login" }]} />
                       <SidebarLinkGroupMenu open={open} links={[{ to: "/auth/register", label: "Register" }]} />
                     </>
                   )}

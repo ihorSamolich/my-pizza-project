@@ -11,6 +11,9 @@ const buttonVariants = cva("inline-flex gap-1 items-center border font-medium ro
       secondary: "bg-gray-600 border-transparent text-white hover:bg-gray-700 focus:ring-gray-500",
       success: "bg-green-600 border-transparent text-white hover:bg-green-700 focus:ring-green-500",
       danger: "bg-red-600 border-transparent text-white hover:bg-red-700 focus:ring-red-500",
+      light: "bg-blue-500 dark:bg-sky-500 border-transparent text-black dark:text-white hover:opacity-90 ",
+      login:
+        "bg-gradient-to-r from-blue-400 via-cyan-500 to-blue-600 text-white hover:from-blue-500 hover:via-cyan-600 hover:to-blue-700 border-0",
     },
     size: {
       default: "px-4 py-2 text-sm",
