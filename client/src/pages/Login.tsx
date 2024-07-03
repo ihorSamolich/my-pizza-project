@@ -1,18 +1,25 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { IconCheck, IconLoader2, IconLogin2 } from "@tabler/icons-react";
+import { IconLoader2, IconLogin2 } from "@tabler/icons-react";
 import { useLoginMutation } from "app/services/accountService.ts";
+import { setCredentials } from "app/slice/userSlice.ts";
+import { useAppDispatch } from "app/store.ts";
 import { Button, Input, Label } from "components/ui";
-import { ILoginResponse } from "interfaces/account.ts";
+import { IUser } from "interfaces/account.ts";
 import { LoginSchema, LoginSchemaType } from "interfaces/zod/account.ts";
 import WelcomeBanner from "partials/dashboard/WelcomeBanner.tsx";
 import { Helmet } from "react-helmet";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
-
-import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { jwtParser } from "utils/jwtParser.ts";
+import { setLocalStorageItem } from "utils/localStorageUtils.ts";
+import { showNotification } from "utils/showNotification.ts";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useAppDispatch();
 
   const {
     register,
@@ -22,15 +29,19 @@ const LoginPage = () => {
 
   const onSubmit = async (data: LoginSchemaType) => {
     try {
-      await login(data).unwrap();
-      onLoginSuccess();
+      const res = await login(data).unwrap();
+      onLoginSuccess(res.token);
+      showNotification(`Авторизація успішна!`, "success");
     } catch (error) {
-      console.log(error);
+      showNotification(`Помилка авторизаціі. Перевірте ваші дані!`, "error");
     }
   };
 
-  const onLoginSuccess = (response: ILoginResponse) => {
-    console.log(response);
+  const onLoginSuccess = (token: string) => {
+    setLocalStorageItem("authToken", token);
+    dispatch(setCredentials({ user: jwtParser(token) as IUser, token: token }));
+    const { from } = location.state || { from: { pathname: "/" } };
+    navigate(from);
   };
 
   return (
@@ -59,7 +70,7 @@ const LoginPage = () => {
           <div className="text-center font-semibold">
             <p className="text-sm text-gray-600 dark:text-gray-100">
               Don't have an account?{" "}
-              <Link to="auth/register" className="text-blue-500 hover:underline">
+              <Link to="/auth/register" className="text-blue-500 hover:underline">
                 Sign up
               </Link>
             </p>

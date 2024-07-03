@@ -5,10 +5,12 @@ import { categoryApi } from "app/services/categoryService.ts";
 import { ingredientApi } from "app/services/ingredientService.ts";
 import { pizzaApi } from "app/services/pizzaService.ts";
 import { pizzaSizeApi } from "app/services/pizzaSizeService.ts";
+import userReducer from "app/slice/userSlice.ts";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 export const store = configureStore({
   reducer: {
+    user: userReducer,
     [categoryApi.reducerPath]: categoryApi.reducer,
     [ingredientApi.reducerPath]: ingredientApi.reducer,
     [pizzaApi.reducerPath]: pizzaApi.reducer,

@@ -4,6 +4,15 @@ export interface IUser {
   lastName: string;
   email: string;
   photo: string;
+  exp: number;
+}
+
+export interface IUserCreate {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  image: File;
 }
 
 export interface ILogin {
@@ -13,4 +22,8 @@ export interface ILogin {
 
 export interface ILoginResponse {
   token: string;
+}
+export interface IUserState {
+  user: IUser | null;
+  token: string | null;
 }

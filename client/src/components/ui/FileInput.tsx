@@ -32,9 +32,9 @@ const FileInput = forwardRef<HTMLInputElement, FileInputProps>(({ onChange, prev
     <div className="flex flex-col items-center justify-center w-full h-64 shadow-sm bg-gray-50 border border-gray-300 text-gray-900 rounded-lg hover:ring-blue-500 hover:border-blue-500  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:hover:ring-blue-500 dark:hover:border-blue-500 dark:shadow-sm-light ">
       <label htmlFor="image" className="text-center flex gap-5 items-center cursor-pointer">
         {previewImage ? (
-          <img className="h-28 w-28 object-cover rounded-md" src={previewImage} alt="Preview" />
+          <img className="h-10 w-10 sm:h-28 sm:w-28 object-cover rounded-md" src={previewImage} alt="Preview" />
         ) : (
-          <IconPhoto className="h-28 w-28" />
+          <IconPhoto className="h-10 w-10 sm:h-28 sm:w-28" />
         )}
         <div className="gap-2 flex flex-col text-sm leading-6 items-center text-gray-600">
           <IconCloudUpload />
