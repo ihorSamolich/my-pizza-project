@@ -19,7 +19,7 @@ namespace WebPizza.Controllers
     ) : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> SignIn([FromForm] SignInVm model)
+        public async Task<IActionResult> SignIn([FromBody] SignInVm model)
         {
             UserEntity? user = await userManager.FindByEmailAsync(model.Email);
 

@@ -10,14 +10,14 @@ export const accountApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation<ILoginResponse, ILogin>({
       query: (data) => {
-        const formData = new FormData();
-        formData.append("email", data.email);
-        formData.append("password", data.password);
+        // const formData = new FormData();
+        // formData.append("email", data.email);
+        // formData.append("password", data.password);
 
         return {
           url: "SignIn",
           method: "POST",
-          body: formData,
+          body: data,
         };
       },
     }),
