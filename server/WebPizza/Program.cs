@@ -5,17 +5,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using WebPizza.Data;
-using WebPizza.Data.Entities;
-using WebPizza.Data.Entities.Identity;
+using WebPizza.Infrastructure.Data;
+using WebPizza.Core.Entities.Identity;
 using WebPizza.Mapper;
-using WebPizza.Services;
-using WebPizza.Services.ControllerServices;
-using WebPizza.Services.ControllerServices.Interfaces;
-using WebPizza.Services.Interfaces;
-using WebPizza.Services.PaginationServices;
-using WebPizza.ViewModels.Category;
-using WebPizza.ViewModels.Pizza;
+using WebPizza.Core.Interfaces;
+using WebPizza.Application.Services;
+using WebPizza.Core.Interfaces.ControllerInterfaces;
+using WebPizza.Application.Services.ControllerServices;
+using WebPizza.Core.DTO.Category;
+using WebPizza.Core.DTO.Pizza;
+using WebPizza.Application.Services.PaginationServices;
 
 var builder = WebApplication.CreateBuilder(args);
 

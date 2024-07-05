@@ -3,12 +3,10 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebPizza.Data;
-using WebPizza.Services.ControllerServices;
-using WebPizza.Services.ControllerServices.Interfaces;
-using WebPizza.Services.Interfaces;
-using WebPizza.ViewModels.Category;
-using WebPizza.ViewModels.Ingredient;
+using WebPizza.Core.DTO.Ingredient;
+using WebPizza.Core.Interfaces.ControllerInterfaces;
+using WebPizza.Infrastructure.Data;
+
 
 namespace WebPizza.Controllers;
 

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using WebPizza.Services.Interfaces;
-using WebPizza.ViewModels.Category;
+using WebPizza.Core.DTO.Category;
+using WebPizza.Core.Interfaces;
 
 namespace WebPizza.Validators.Category;
 public class CategoryCreateValidator : AbstractValidator<CategoryCreateVm>

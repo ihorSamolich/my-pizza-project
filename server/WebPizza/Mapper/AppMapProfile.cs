@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using WebPizza.Data.Entities;
-using WebPizza.Data.Entities.Identity;
-using WebPizza.ViewModels.Account;
-using WebPizza.ViewModels.Category;
-using WebPizza.ViewModels.Ingredient;
-using WebPizza.ViewModels.Pizza;
-using WebPizza.ViewModels.PizzaSizes;
-using WebPizza.ViewModels.Sizes;
+using WebPizza.Core.DTO.Account;
+using WebPizza.Core.DTO.Category;
+using WebPizza.Core.DTO.Ingredient;
+using WebPizza.Core.DTO.Pizza;
+using WebPizza.Core.DTO.PizzaSizes;
+using WebPizza.Core.DTO.Sizes;
+using WebPizza.Core.Entities;
+using WebPizza.Core.Entities.Identity;
 
 namespace WebPizza.Mapper;
 public class AppMapProfile : Profile

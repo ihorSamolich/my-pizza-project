@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
-using WebPizza.Services.Interfaces;
-using WebPizza.ViewModels.Category;
-using WebPizza.ViewModels.Ingredient;
+using WebPizza.Core.DTO.Ingredient;
+using WebPizza.Core.Interfaces;
 
 namespace WebPizza.Validators.Ingredient;
 

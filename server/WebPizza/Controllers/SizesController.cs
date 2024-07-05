@@ -2,10 +2,8 @@
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebPizza.Data;
-using WebPizza.Services.ControllerServices.Interfaces;
-using WebPizza.ViewModels.Pizza;
-using WebPizza.ViewModels.Sizes;
+using WebPizza.Core.DTO.Sizes;
+using WebPizza.Infrastructure.Data;
 
 namespace WebPizza.Controllers;
 
