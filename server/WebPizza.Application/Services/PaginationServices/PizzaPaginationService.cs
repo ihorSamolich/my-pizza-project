@@ -14,6 +14,9 @@ public class PizzaPaginationService(
 
     protected override IQueryable<PizzaEntity> FilterQuery(IQueryable<PizzaEntity> query, PizzaFilterVm paginationVm)
     {
+        if (paginationVm.CategoryId > 0)
+            query = query.Where(c => c.CategoryId == paginationVm.CategoryId);
+
         return query;
     }
 }
