@@ -2,19 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebPizza.Infrastructure.Data;
 
-
 #nullable disable
 
-namespace WebPizza.Migrations
+namespace WebPizza.Infrastructure.Migrations
 {
     [DbContext(typeof(PizzaDbContext))]
-    partial class PizzaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240709175201_Init db")]
+    partial class Initdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,10 +76,12 @@ namespace WebPizza.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -98,10 +102,12 @@ namespace WebPizza.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -111,7 +117,7 @@ namespace WebPizza.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.CategoryEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.CategoryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -140,7 +146,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_categories");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.RoleEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.RoleEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -169,7 +175,7 @@ namespace WebPizza.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.UserEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.UserEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,7 +254,7 @@ namespace WebPizza.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.UserRoleEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.UserRoleEntity", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -263,7 +269,7 @@ namespace WebPizza.Migrations
                     b.ToTable("AspNetUserRoles", (string)null);
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.IngredientEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.IngredientEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -292,7 +298,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_ingredients");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -332,7 +338,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_pizzas");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaIngredientEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaIngredientEntity", b =>
                 {
                     b.Property<int>("PizzaId")
                         .HasColumnType("integer");
@@ -347,7 +353,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_pizza_ingredients");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaPhotoEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaPhotoEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -378,7 +384,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_pizza_photos");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizeEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaSizeEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -396,7 +402,7 @@ namespace WebPizza.Migrations
                     b.ToTable("tbl_sizes");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaSizePriceEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -430,7 +436,7 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.Identity.RoleEntity", null)
+                    b.HasOne("WebPizza.Core.Entities.Identity.RoleEntity", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -439,7 +445,7 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.Identity.UserEntity", null)
+                    b.HasOne("WebPizza.Core.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -448,7 +454,7 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.Identity.UserEntity", null)
+                    b.HasOne("WebPizza.Core.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -457,22 +463,22 @@ namespace WebPizza.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.Identity.UserEntity", null)
+                    b.HasOne("WebPizza.Core.Entities.Identity.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.UserRoleEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.UserRoleEntity", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.Identity.RoleEntity", "Role")
+                    b.HasOne("WebPizza.Core.Entities.Identity.RoleEntity", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebPizza.Data.Entities.Identity.UserEntity", "User")
+                    b.HasOne("WebPizza.Core.Entities.Identity.UserEntity", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,9 +489,9 @@ namespace WebPizza.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaEntity", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.CategoryEntity", "Category")
+                    b.HasOne("WebPizza.Core.Entities.CategoryEntity", "Category")
                         .WithMany("Pizzas")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -494,15 +500,15 @@ namespace WebPizza.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaIngredientEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaIngredientEntity", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.IngredientEntity", "Ingredient")
+                    b.HasOne("WebPizza.Core.Entities.IngredientEntity", "Ingredient")
                         .WithMany("Pizzas")
                         .HasForeignKey("IngredientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
+                    b.HasOne("WebPizza.Core.Entities.PizzaEntity", "Pizza")
                         .WithMany("Ingredients")
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -513,9 +519,9 @@ namespace WebPizza.Migrations
                     b.Navigation("Pizza");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaPhotoEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaPhotoEntity", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
+                    b.HasOne("WebPizza.Core.Entities.PizzaEntity", "Pizza")
                         .WithMany("Photos")
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -524,15 +530,15 @@ namespace WebPizza.Migrations
                     b.Navigation("Pizza");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizePriceEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaSizePriceEntity", b =>
                 {
-                    b.HasOne("WebPizza.Data.Entities.PizzaEntity", "Pizza")
+                    b.HasOne("WebPizza.Core.Entities.PizzaEntity", "Pizza")
                         .WithMany("Sizes")
                         .HasForeignKey("PizzaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WebPizza.Data.Entities.PizzaSizeEntity", "Size")
+                    b.HasOne("WebPizza.Core.Entities.PizzaSizeEntity", "Size")
                         .WithMany("PizzaSizePrices")
                         .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -543,27 +549,27 @@ namespace WebPizza.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.CategoryEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.CategoryEntity", b =>
                 {
                     b.Navigation("Pizzas");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.RoleEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.RoleEntity", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.Identity.UserEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.Identity.UserEntity", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.IngredientEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.IngredientEntity", b =>
                 {
                     b.Navigation("Pizzas");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaEntity", b =>
                 {
                     b.Navigation("Ingredients");
 
@@ -572,7 +578,7 @@ namespace WebPizza.Migrations
                     b.Navigation("Sizes");
                 });
 
-            modelBuilder.Entity("WebPizza.Data.Entities.PizzaSizeEntity", b =>
+            modelBuilder.Entity("WebPizza.Core.Entities.PizzaSizeEntity", b =>
                 {
                     b.Navigation("PizzaSizePrices");
                 });
