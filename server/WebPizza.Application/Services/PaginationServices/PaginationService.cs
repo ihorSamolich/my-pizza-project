@@ -23,7 +23,6 @@ public abstract class PaginationService<EntityType, EntityVmType, PaginationVmTy
         if (vm.PageSize < 1)
             throw new Exception("PageSize is invalid");
 
-
         var query = GetQuery();
 
         query = FilterQuery(query, vm);

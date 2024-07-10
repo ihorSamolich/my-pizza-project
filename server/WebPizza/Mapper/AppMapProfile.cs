@@ -18,7 +18,9 @@ public class AppMapProfile : Profile
 
         // Category
         CreateMap<CategoryCreateVm, CategoryEntity>()
-            .ForMember(c => c.Image, opt => opt.Ignore());
+            .ForMember(c => c.Image, opt => opt.Ignore())
+            .ForMember(c => c.Pizzas, opt => opt.Ignore());
+
 
         CreateMap<CategoryEntity, CategoryVm>();
 
