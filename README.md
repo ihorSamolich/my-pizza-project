@@ -50,6 +50,8 @@ VITE_API_URL=http://localhost:5174
 ### Запуск Docker Compose
 У кореневій директорії проекту запустіть команди:
 
+** Переконайтеся, що PostgreSQL на вашій локальній машині зупинено, оскільки Docker Compose буде використовувати свій контейнер з PostgreSQL.*
+
 ```
 docker-compose build
 ```
