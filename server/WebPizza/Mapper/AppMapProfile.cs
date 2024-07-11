@@ -22,7 +22,9 @@ public class AppMapProfile : Profile
             .ForMember(c => c.Pizzas, opt => opt.Ignore());
 
 
-        CreateMap<CategoryEntity, CategoryVm>();
+        CreateMap<CategoryEntity, CategoryVm>()
+            .ForMember(dest => dest.NumberOfPizzas, opt => opt.MapFrom(src => src.Pizzas.Count));
+
 
         // Ingredient
         CreateMap<IngredientCreateVm, IngredientEntity>()
