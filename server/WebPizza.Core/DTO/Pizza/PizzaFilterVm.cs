@@ -6,5 +6,5 @@ namespace WebPizza.Core.DTO.Pizza;
 public class PizzaFilterVm : PaginationVm
 {
     public int CategoryId { get; set; }
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; } = null!;
 }
