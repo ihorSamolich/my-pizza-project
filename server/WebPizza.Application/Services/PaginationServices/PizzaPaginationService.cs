@@ -17,6 +17,10 @@ public class PizzaPaginationService(
         if (paginationVm.CategoryId > 0)
             query = query.Where(c => c.CategoryId == paginationVm.CategoryId);
 
+        if (paginationVm.Name is not null)
+            query = query.Where(c => c.Name.ToLower().Contains(paginationVm.Name.ToLower()));
+
+
         return query;
     }
 }

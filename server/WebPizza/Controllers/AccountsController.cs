@@ -36,6 +36,7 @@ public class AccountsController(
     public async Task<IActionResult> Registration([FromForm] RegisterVm vm)
     {
         var user = mapper.Map<UserEntity>(vm);
+
         user.Photo = await imageService.SaveImageAsync(vm.Image);
 
         try

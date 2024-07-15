@@ -4,7 +4,7 @@ export interface ICategory {
   id: number;
   name: string;
   image: string;
-  // pizzas: IPizza[];
+  numberOfPizzas: number;
 }
 
 export interface ICategoryCreate {

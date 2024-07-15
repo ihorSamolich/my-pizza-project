@@ -4,8 +4,8 @@ import { getRandomColor } from "utils/getRandomColor.ts";
 export const generateCategoryChartData = (categories: ICategory[]) => {
   const labels = categories.map((data) => data.name);
 
-  // const data = categories.map((data) => data.pizzas.length);
-  const data = categories.map(() => 10);
+  const data = categories.map((data) => data.numberOfPizzas);
+  // const data = categories.map(() => 10);
 
   const backgroundColor = categories.map(() => getRandomColor());
 
