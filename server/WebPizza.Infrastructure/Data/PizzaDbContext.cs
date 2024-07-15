@@ -20,6 +20,11 @@ public class PizzaDbContext : IdentityDbContext<UserEntity, RoleEntity, int,
     public DbSet<PizzaSizePriceEntity> PizzaSizes { get; set; } = null!;
     public DbSet<PizzaPhotoEntity> PizzaPhotos { get; set; } = null!;
 
+    public DbSet<OrderItemEntity> OrderItems { get; set; } = null!;
+    public DbSet<OrderEntity> Orders { get; set; } = null!;
+    public DbSet<OrderStatusEntity> OrderStatus { get; set; } = null!;
+
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
