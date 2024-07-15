@@ -2,6 +2,7 @@
 using WebPizza.Core.DTO.Account;
 using WebPizza.Core.DTO.Category;
 using WebPizza.Core.DTO.Ingredient;
+using WebPizza.Core.DTO.Order;
 using WebPizza.Core.DTO.Pizza;
 using WebPizza.Core.DTO.PizzaSizes;
 using WebPizza.Core.DTO.Sizes;
@@ -55,6 +56,14 @@ public class AppMapProfile : Profile
 
         // Sizes
         CreateMap<PizzaSizeEntity, SizeVm>();
+
+        // Order Item Entity
+        CreateMap<OrderItemEntity, OrderItemFullVm>()
+             .ForMember(dest => dest.PizzaSizeId, opt => opt.MapFrom(src => src.SizePriceId));
+
+        // Order
+        CreateMap<OrderEntity, OrderVm>()
+            .ForMember(dest => dest.OrderItems, opt => opt.MapFrom(src => src.OrderItems));
 
     }
 

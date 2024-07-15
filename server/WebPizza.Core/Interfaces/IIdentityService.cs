@@ -1,8 +1,9 @@
-﻿using WebPizza.Core.Entities.Identity;
+﻿using Microsoft.AspNetCore.Mvc;
+using WebPizza.Core.Entities.Identity;
 
 namespace WebPizza.Core.Interfaces;
 
 public interface IIdentityService
 {
-    //Task<UserEntity> GetCurrentUserAsync(ControllerBase controller);
+    Task<UserEntity> GetCurrentUserAsync(ControllerBase controller);
 }

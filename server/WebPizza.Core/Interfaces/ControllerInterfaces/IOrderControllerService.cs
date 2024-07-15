@@ -1,4 +1,4 @@
-﻿using WebPizza.Core.DTO;
+﻿using WebPizza.Core.DTO.Order;
 using WebPizza.Core.Entities.Identity;
 
 namespace WebPizza.Core.Interfaces.ControllerInterfaces;

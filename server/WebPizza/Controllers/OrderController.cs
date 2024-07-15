@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebPizza.Core.DTO;
 using WebPizza.Core.DTO.Ingredient;
+using WebPizza.Core.DTO.Order;
 using WebPizza.Core.DTO.Sizes;
 using WebPizza.Core.Entities;
 using WebPizza.Core.Entities.Identity;
+using WebPizza.Core.Interfaces;
 using WebPizza.Core.Interfaces.ControllerInterfaces;
 using WebPizza.Infrastructure.Data;
 
@@ -17,19 +18,20 @@ namespace WebPizza.Controllers;
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class OrderController(
+    IMapper mapper,
     IOrderControllerService service,
-    UserManager<UserEntity> userManager,
+    IIdentityService identityService,
     PizzaDbContext pizzaContext
     ) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = "Admin,User")]
+    //[Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> GetAll()
     {
         try
         {
             var list = await pizzaContext.Orders
-              //.ProjectTo<SizeVm>(mapper.ConfigurationProvider)
+              .ProjectTo<OrderVm>(mapper.ConfigurationProvider)
               .ToArrayAsync();
 
             return Ok(list);
@@ -44,8 +46,7 @@ public class OrderController(
     [Authorize(Roles = "Admin,User")]
     public async Task<IActionResult> Create([FromBody] OrderCreateVm vm)
     {
-        string userEmail = User.Claims.First().Value;
-        var user = await userManager.FindByEmailAsync(userEmail);
+        var user = await identityService.GetCurrentUserAsync(this);
 
         if (user == null)
         {

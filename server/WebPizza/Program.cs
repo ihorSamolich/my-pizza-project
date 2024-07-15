@@ -100,6 +100,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddTransient<IIdentityService, IdentityService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 

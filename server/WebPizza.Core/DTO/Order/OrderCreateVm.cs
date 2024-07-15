@@ -1,4 +1,4 @@
-﻿namespace WebPizza.Core.DTO;
+﻿namespace WebPizza.Core.DTO.Order;
 
 public class OrderCreateVm
 {
