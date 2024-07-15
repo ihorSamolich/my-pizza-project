@@ -15,6 +15,7 @@ using WebPizza.Application.Services.ControllerServices;
 using WebPizza.Core.DTO.Category;
 using WebPizza.Core.DTO.Pizza;
 using WebPizza.Application.Services.PaginationServices;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -67,8 +68,32 @@ builder.Services
 
 
 builder.Services.AddControllers();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition(
+        "Bearer",
+        new OpenApiSecurityScheme
+        {
+            Description = "Jwt Auth header using the Bearer scheme",
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer"
+        }
+    );
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement {
+        {
+            new OpenApiSecurityScheme {
+                Reference = new OpenApiReference {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+   });
+});
 
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
@@ -84,6 +109,8 @@ builder.Services.AddTransient<ICategoryControllerService, CategoryControllerServ
 builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, CategoryPaginationService>();
 
 builder.Services.AddTransient<IIngredientControllerService, IngredientControllerService>();
+
+builder.Services.AddTransient<IOrderControllerService, OrderControllerService>();
 
 builder.Services.AddTransient<IPizzaControllerService, PizzaControllerService>();
 builder.Services.AddTransient<IPaginationService<PizzaVm, PizzaFilterVm>, PizzaPaginationService>();
@@ -113,11 +140,11 @@ app.UseStaticFiles(new StaticFileOptions
 });
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+//}
 
 app.UseAuthorization();
 

@@ -152,6 +152,28 @@ public static class SeederDB
                 await context.SaveChangesAsync();
             }
 
+
+            // Statuses seed
+            if (await context.OrderStatus.CountAsync() < 1)
+            {
+                var orderStatuses = configuration
+                    .GetSection("DefaultSeedData:OrderStatuses")
+                    .Get<string[]>();
+
+                if (orderStatuses is null)
+                    throw new Exception("Configuration DefaultSeedData:PizzaSizes is invalid");
+
+                List<OrderStatusEntity> statuses = new List<OrderStatusEntity>();
+
+                foreach (var status in orderStatuses)
+                {
+                    statuses.Add(new OrderStatusEntity { Name = status });
+                }
+
+                context.OrderStatus.AddRange(statuses);
+                await context.SaveChangesAsync();
+            }
+
             // Pizza seed
             if (await context.Pizzas.CountAsync() < 1)
             {

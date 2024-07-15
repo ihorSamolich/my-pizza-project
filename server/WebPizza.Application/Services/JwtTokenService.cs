@@ -51,8 +51,8 @@ public class JwtTokenService(
             .ToList();
 
         var claims = new List<Claim> {
-            new ("id", user.Id.ToString()),
             new ("email", userEmail),
+            new ("id", user.Id.ToString()),
             new ("firstName", user.FirstName),
             new ("lastName", user.LastName),
             new ("photo", user.Photo)
