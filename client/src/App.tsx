@@ -16,6 +16,7 @@ const CreateIngredientPage = lazyWithDelay(() => import("pages/ingredients/Creat
 const EditIngredientPage = lazyWithDelay(() => import("pages/ingredients/EditIngredient.tsx"));
 const CreatePizzaPage = lazyWithDelay(() => import("pages/pizzas/CreatePizza.tsx"));
 const EditPizzaPage = lazyWithDelay(() => import("pages/pizzas/EditPizza.tsx"));
+const OrdersPage = lazyWithDelay(() => import("pages/orders/Orders.tsx"));
 
 const App = () => {
   return (
@@ -39,6 +40,10 @@ const App = () => {
             <Route path="list" element={<IngredientsPage />} />
             <Route path="create" element={<CreateIngredientPage />} />
             <Route path="edit/:id" element={<EditIngredientPage />} />
+          </Route>
+
+          <Route path="orders">
+            <Route path="list" element={<OrdersPage />} />
           </Route>
 
           <Route path="settings">

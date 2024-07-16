@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import { accountApi } from "app/services/accountService.ts";
 import { categoryApi } from "app/services/categoryService.ts";
 import { ingredientApi } from "app/services/ingredientService.ts";
+import { orderApi } from "app/services/orderService.ts";
 import { pizzaApi } from "app/services/pizzaService.ts";
 import { pizzaSizeApi } from "app/services/pizzaSizeService.ts";
 import userReducer from "app/slice/userSlice.ts";
@@ -16,6 +17,7 @@ export const store = configureStore({
     [pizzaApi.reducerPath]: pizzaApi.reducer,
     [pizzaSizeApi.reducerPath]: pizzaSizeApi.reducer,
     [accountApi.reducerPath]: accountApi.reducer,
+    [orderApi.reducerPath]: orderApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -24,6 +26,7 @@ export const store = configureStore({
       pizzaApi.middleware,
       ingredientApi.middleware,
       pizzaSizeApi.middleware,
+      orderApi.middleware,
     ),
 });
 

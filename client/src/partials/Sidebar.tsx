@@ -5,9 +5,9 @@ import {
   IconCherry,
   IconDashboard,
   IconHome,
-  IconInbox,
   IconPizza,
   IconSettings,
+  IconTruckDelivery,
   IconUserScan,
 } from "@tabler/icons-react";
 import ChevronDown from "components/sidebar/ChevronDown.tsx";
@@ -191,13 +191,26 @@ const Sidebar: React.FC<ISidebarProps> = (props) => {
                   )}
                 </SidebarLinkGroup>
 
-                {/* Inbox */}
-                <SidebarLink
-                  to="/inbox"
-                  icon={IconInbox}
-                  label="Inbox"
-                  // activeCondition={(pathname) => pathname.includes("inbox")}
-                />
+                {/*/!* Orders *!/*/}
+                <SidebarLinkGroup activecondition={pathname.includes("orders")}>
+                  {(handleClick, open) => (
+                    <>
+                      <SidebarLinkGroupTitle
+                        href="#"
+                        icon={IconTruckDelivery}
+                        isActive={pathname.includes("orders")}
+                        handleClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded ? handleClick() : setSidebarExpanded(true);
+                        }}
+                      >
+                        Orders
+                        <ChevronDown open={open} />
+                      </SidebarLinkGroupTitle>
+                      <SidebarLinkGroupMenu open={open} links={[{ to: "/orders/list", label: "List" }]} />
+                    </>
+                  )}
+                </SidebarLinkGroup>
 
                 {/* Calendar */}
                 <SidebarLink
