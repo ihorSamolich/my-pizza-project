@@ -6,8 +6,6 @@ import { Helmet } from "react-helmet";
 const OrdersPage = () => {
   const { data: orders, isLoading } = useGetAllOrdersQuery();
 
-  console.log(orders);
-
   return (
     <div className="flex flex-col gap-4">
       <Helmet>

@@ -16,6 +16,7 @@ using WebPizza.Core.DTO.Category;
 using WebPizza.Core.DTO.Pizza;
 using WebPizza.Application.Services.PaginationServices;
 using Microsoft.OpenApi.Models;
+using WebPizza.Core.DTO.Order;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,7 @@ builder.Services.AddAutoMapper(typeof(AppMapProfile));
 builder.Services.AddTransient<IImageService, ImageService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddTransient<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IScopedIdentityService, ScopedIdentityService>();
 builder.Services.AddTransient<IImageValidator, ImageValidator>();
 builder.Services.AddTransient<IExistingEntityCheckerService, ExistingEntityCheckerService>();
 
@@ -112,6 +114,8 @@ builder.Services.AddTransient<IPaginationService<CategoryVm, CategoryFilterVm>, 
 builder.Services.AddTransient<IIngredientControllerService, IngredientControllerService>();
 
 builder.Services.AddTransient<IOrderControllerService, OrderControllerService>();
+builder.Services.AddTransient<IPaginationService<OrderVm, OrderFilterVm>, OrderPaginationService>();
+
 
 builder.Services.AddTransient<IPizzaControllerService, PizzaControllerService>();
 builder.Services.AddTransient<IPaginationService<PizzaVm, PizzaFilterVm>, PizzaPaginationService>();

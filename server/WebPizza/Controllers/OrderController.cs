@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebPizza.Application.Services;
 using WebPizza.Core.DTO.Ingredient;
 using WebPizza.Core.DTO.Order;
+using WebPizza.Core.DTO.Pagination;
 using WebPizza.Core.DTO.Sizes;
 using WebPizza.Core.Entities;
 using WebPizza.Core.Entities.Identity;
@@ -20,6 +22,9 @@ namespace WebPizza.Controllers;
 public class OrderController(
     IMapper mapper,
     IOrderControllerService service,
+    IScopedIdentityService scopedIdentityService,
+    IPaginationService<OrderVm, OrderFilterVm> pagination,
+
     IIdentityService identityService,
     PizzaDbContext pizzaContext
     ) : ControllerBase
@@ -39,6 +44,22 @@ public class OrderController(
         catch (Exception)
         {
             return StatusCode(500, "Internal server error");
+        }
+    }
+
+    [HttpGet]
+    [Authorize(Roles = "Admin,User")]
+    public async Task<IActionResult> GetPage([FromQuery] OrderFilterVm vm)
+    {
+        await scopedIdentityService.InitCurrentUserAsync(this);
+
+        try
+        {
+            return Ok(await pagination.GetPageAsync(vm));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
 
